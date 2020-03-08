@@ -1,12 +1,12 @@
 # raspiでつくるスマートリモコン
 
 ## 概要
-raspiを使って家の赤外線リモコンを操作できるスマートリモコンを作成した。  
+参考サイトをもとにraspiを使って家の赤外線リモコンを操作できるスマートリモコンを作成してみた。  
 [irrp.py](http://abyz.me.uk/rpi/pigpio/examples.html#Python_irrp_py) を使って赤外線リモコンの送信データを取得、それをjsonデータに変換する。  
 ラズパイに立てたapiサーバに、先程のjsonデータをポストすると、  
 そのフォーマットに従って赤外線LEDをLチカさせ、リモコンとしての操作ができる。
 
-以下URLを参考に作成。  
+以下URLを参考にした。  
 [格安スマートリモコンの作り方](https://qiita.com/takjg/items/e6b8af53421be54b62c9)  
 [うたかたサバイバー Raspberry Piでエアコンの赤外線リモコンを解析する](https://paltee.net/archives/247)  
 [電脳伝説 赤外線LEDドライブ回路の決定版](https://vintagechips.wordpress.com/2013/10/05%E8%B5%A4%E5%A4%96%E7%B7%9Aled%E3%83%89%E3%83%A9%E3%82%A4%E3%83%96%E5%9B%9E%E8%B7%AF%E3%81%AE%E6%B1%BA%E5%AE%9A%E7%89%88/)  
