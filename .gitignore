@@ -1,0 +1,10 @@
+*.bak*
+*.pyc
+irrp.py
+codes
+test_codes
+test.py
+launch.json
+settings.json
+debug_tools/
+.vscode
