@@ -1,11 +1,13 @@
 *.bak*
 *.pyc
 irrp.py
+.vscode
 codes
 test_codes
 test.py
 launch.json
 settings.json
 debug_tools/
-
-.vscode
+db/
+package-lock.json
+/web-server/src/node_modules/

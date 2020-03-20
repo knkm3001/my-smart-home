@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <link rel='stylesheet' href='/test-gcp-css/style.css'>
+    <link rel='stylesheet' href='/test-gcp-css/microphone.css'>
+
+  </head>
+  <body>
+      <div class="header">
+              <h3 class="text-muted">GCP Speech-To-Text Test</h3>
+      </div>
+
+      <div class='gcp-console'>
+        <div class="microphone"></div>
+      <div>
+    {% if message%}
+      <p>{{message}}</p>
+    {% endif %}
+  </body>
+</html>
