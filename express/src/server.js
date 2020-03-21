@@ -24,7 +24,7 @@ const options = {
     useNewUrlParser : true
 }
 
-const url = 'mongodb://user:password@mongo:27017/myroom_data'
+const url = 'mongodb://user:password@mongo:27017/my-smart-room'
 
 
 mongoose.connect(url, options);
