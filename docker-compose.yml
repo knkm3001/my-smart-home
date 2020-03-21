@@ -10,19 +10,33 @@ services:
         volumes:
             - ./web-server/src/:/usr/src/app
         ports:
+      ports:
+           - 9051:9050
+    express:
+        build:
+           context: express
+        environment:
+            TZ: Asia/Tokyo
+        tty: true
+        volumes:
+            - ./express/src/:/usr/src/app
+        ports:
              - 8081:8080
 
     mongo:
         image: mongo
         restart: always
         environment:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: root
+          MONGO_INITDB_ROOT_USERNAME: ${ROOT_USERNAME}
+          MONGO_INITDB_ROOT_PASSWORD: ${ROOT_PASSWORD}
+
+          MONGO_INITDB_DATABASE: myroom_data
         ports:
           - 27017:27017
         volumes:
-          - ./db:/data/db
-          - ./configdb:/data/configdb
+          - ./mongo/db:/data/db
+          - ./mongo/configdb:/data/configdb
+          - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
   
     mongo-express:
         image: mongo-express
@@ -30,7 +44,9 @@ services:
         ports:
           - 18081:8081
         environment:
-          ME_CONFIG_MONGODB_ADMINUSERNAME: root
-          ME_CONFIG_MONGODB_ADMINPASSWORD: root
-
+          ME_CONFIG_MONGODB_ADMINUSERNAME: ${ROOT_USERNAME}
+          ME_CONFIG_MONGODB_ADMINPASSWORD: ${ROOT_PASSWORD}
+          ME_CONFIG_MONGODB_PORT: 27017
+        depends_on:
+          - mongo
 
