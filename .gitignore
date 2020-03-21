@@ -1,6 +1,7 @@
 *.bak*
 *.pyc
 irrp.py
+.env
 .vscode
 codes
 test_codes
@@ -8,6 +9,6 @@ test.py
 launch.json
 settings.json
 debug_tools/
-db/
 package-lock.json
-/web-server/src/node_modules/
+/express/src/node_modules/
+/mongo/db/
