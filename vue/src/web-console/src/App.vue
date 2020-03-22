@@ -53,7 +53,7 @@ export default {
   height: 50%;
   width : 45%;
   margin: 20px;
-  background: #ffffff;
+  background: #1b1a1a;
   color: #000000;
   border: solid 1px #979397;
 }

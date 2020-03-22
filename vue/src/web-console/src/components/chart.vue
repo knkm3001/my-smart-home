@@ -23,7 +23,6 @@ export default {
   },
   methods: {
       getApi(fetchnum = 0) {
-        fetchnum = 12;
         var url = 'http://192.168.0.24:13000/api/fetch/'
         if(fetchnum) url += '?fetchnum=' + fetchnum;
         axios.get(url, {
@@ -31,7 +30,7 @@ export default {
         'Access-Control-Allow-Origin': '*',
         })
           .then((response) => {
-            this.fetch_data = response.data;
+            this.fetch_data = response.data.reverse();
           }).catch(err => {
             this.fetch_data = err;
           });

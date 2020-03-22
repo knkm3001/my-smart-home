@@ -54,10 +54,10 @@ setInterval(clock, 1000);
   padding: 20;
   margin: 20px;
   height : 60px;
-  background: #ffffff;
+  background: #504f4f;
   color: #000000;
-  background : #979397;
   font-size: 20px;
+  color: #fff7f7;
 }
 
 
@@ -66,8 +66,6 @@ setInterval(clock, 1000);
   vertical-align: top;
   width : 40%;
   margin: 20px;
-  background: #ffffff;
-  color: #000000;
-  border: solid 1px #ffffff;
+  background: #504f4f;
 }
 </style>
