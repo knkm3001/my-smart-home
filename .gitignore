@@ -12,3 +12,4 @@ debug_tools/
 package-lock.json
 /express/src/node_modules/
 /mongo/db/
+/vue/src/node_modules/

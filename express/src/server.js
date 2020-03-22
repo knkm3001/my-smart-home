@@ -1,13 +1,32 @@
 'use strict';
 
 // Constants
-const PORT = 8080;
+const PORT = 3000;
 const HOST = '0.0.0.0';
 
 // express 周り
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const app = express();
+
+const allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization, access_token'
+  )
+
+  // intercept OPTIONS method
+  if ('OPTIONS' === req.method) {
+    res.send(200)
+  } else {
+    next()
+  }
+}
+app.use(allowCrossDomain)
+
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -54,8 +73,6 @@ app.post('/api/register/', (req, res) => {
 app.get('/api/fetch/', (req, res) => {
   var fetchnum = req.query.fetchnum;
   var num = (typeof parseInt(fetchnum,10) == 'number' && parseInt(fetchnum,10) > 0) ? parseInt(fetchnum,10) : 60
-  console.log(num);
-  console.log(typeof num);
   Roomdata.find(
     {}, // フィルター
     [], // カラム
