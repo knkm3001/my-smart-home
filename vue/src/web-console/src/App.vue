@@ -36,25 +36,19 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  margin-top: 60px;
-  padding: 20px 40px;
-}
-
-
-.flame {
-  height: 80%;
-  width : 95%;
-  margin: auto;
+  margin-top: 20px;
 }
 
 .flame > div{
   display: inline-block;
   vertical-align: top;
-  height: 50%;
-  width : 45%;
-  margin: 20px;
+  width : 44%;
+  height: 400px;
+  margin: 10px;
+  padding: 10px;
   background: #1b1a1a;
   color: #000000;
   border: solid 1px #979397;
+  margin-top: 60px;
 }
 </style>
