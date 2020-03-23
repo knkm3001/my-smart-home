@@ -22,6 +22,7 @@ export default {
     }
   },
   methods: {
+      //TODO getApiを共通コンポーネントにまとめる
       getApi(fetchnum = 0) {
         var url = 'http://192.168.0.24:13000/api/fetch/'
         if(fetchnum) url += '?fetchnum=' + fetchnum;
@@ -48,5 +49,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.chart{
+  height : 60%;
+}
 </style>
