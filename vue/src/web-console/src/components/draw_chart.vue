@@ -13,6 +13,8 @@ export default {
         datasets: []
         },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
           xAxes: [{
             scaleLabel: {
@@ -26,7 +28,7 @@ export default {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-              stepSize: 10,
+              stepSize: 5,
             },
             gridLines: {
               color: 'rgba(255, 255, 255, 0.3)'
