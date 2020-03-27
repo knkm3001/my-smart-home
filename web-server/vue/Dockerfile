@@ -7,4 +7,5 @@ RUN apk update && \
     npm install -g npm @vue/cli
 RUN chmod 777 ./*
 
-CMD ["/bin/sh"]
+CMD ['cd','web-console']
+CMD ['npm','run','serve']
