@@ -10,6 +10,6 @@ launch.json
 settings.json
 debug_tools/
 package-lock.json
-/express/src/node_modules/
-/mongo/db/
-/vue/src/node_modules/
+/web-server/express/src/node_modules/
+/web-server/mongo/db/
+/web-server/vue/src/node_modules/
