@@ -8,4 +8,4 @@ RUN chmod 777 ./*
 RUN npm install
 
 
-#CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]
