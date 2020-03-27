@@ -2,7 +2,6 @@
   <div class="console">
     <div class='clock_frame'>
         <span id="clock_date">{{date}}</span>
-        <span>&nbsp;&nbsp;</span>
         <span id="clock_time">{{time}}</span>
     </div>
     <div class='controlpanel'>
@@ -60,8 +59,7 @@ export default {
         case 'light':
           var payload = '';
           // TODO プロキシ設定
-          //var url = '/api/infrared_code/';
-          var url = 'http://192.168.0.5:5000/api/infrared_code/';
+          var url = '/raspi-api/infrared_code/';
           var status = '';
           if(this.light_state == false){ //onにする
             payload = {
@@ -70,7 +68,10 @@ export default {
               }
             status = true;
           }else{ //offにする
-            payload = {"base_time": 555, "signal": [[16, 8], "017600ff", [1, 1]]}
+            payload = {
+              "base_time": 555,
+              "signal": [[16, 8], "017600ff", [1, 1]]
+              }
             status = false;
           } 
           break;
