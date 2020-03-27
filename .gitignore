@@ -9,3 +9,4 @@ settings.json
 debug_tools/
 
 .vscode
+raspi/init.sh
