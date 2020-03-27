@@ -18,6 +18,7 @@
 import chart from './components/chart.vue'
 import console from './components/console.vue'
 
+
 export default {
   name: 'app',
   components: {

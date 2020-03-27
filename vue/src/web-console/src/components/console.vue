@@ -21,18 +21,13 @@
 </template>
 
 <script>
-
 import axios from 'axios'
 
 export default {
   name: 'console',
   data(){
     return {
-      light_state:false,
-       headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*',
-      }
+      light_state:false
     }
   },
   methods: {
@@ -58,9 +53,8 @@ export default {
       switch(something){
         case 'light':
           var payload = '';
-          // TODO プロキシ設定
-          var url = '/raspi-api/infrared_code/';
           var status = '';
+          var url = '/raspi-api/infrared_code/';
           if(this.light_state == false){ //onにする
             payload = {
               "base_time": 583,
@@ -76,7 +70,10 @@ export default {
           } 
           break;
         }
-        axios.post(url, payload,this.headers)
+        axios.post(url, payload, {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Access-Control-Allow-Origin': '*',
+        })
           .then(() => {
             this.light_state = status;
           }).catch(err => {

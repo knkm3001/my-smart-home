@@ -22,7 +22,6 @@ export default {
     }
   },
   methods: {
-      //TODO Apiを共通コンポーネントにまとめる
       getApi(fetchnum = 0) {
         var url = '/api/fetch'
         if(fetchnum) url += '?fetchnum=' + fetchnum;
