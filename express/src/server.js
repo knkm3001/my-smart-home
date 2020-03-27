@@ -72,7 +72,7 @@ app.post('/api/register/', (req, res) => {
 // get データ取得
 app.get('/api/fetch/', (req, res) => {
   var fetchnum = req.query.fetchnum;
-  var num = (typeof parseInt(fetchnum,10) == 'number' && parseInt(fetchnum,10) > 0) ? parseInt(fetchnum,10) : 60
+  var num = (typeof parseInt(fetchnum,10) == 'number' && parseInt(fetchnum,10) > 0) ? parseInt(fetchnum,10) : 24
   Roomdata.find(
     {}, // フィルター
     [], // カラム

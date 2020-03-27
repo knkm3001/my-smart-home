@@ -2,12 +2,14 @@
   <div class="console">
     <div class='clock_frame'>
         <span id="clock_date">{{date}}</span>
+        <span>&nbsp;&nbsp;</span>
         <span id="clock_time">{{time}}</span>
     </div>
     <div class='controlpanel'>
       <a v-on:click="requestAPI('light')" href='javascript:void(0)'>
         <div class='light'>
-          <img alt="light logo" src="../assets/light.png">
+          <img v-if='light_state' alt="light logo" src="../assets/light_on.png">
+          <img v-else alt="light logo" src="../assets/light_off.png">
         </div>
       </a>
       <a href='javascript:void(0)'>
@@ -49,13 +51,16 @@ export default {
         if (d < 10) d = "0" + d;
         if (mi < 10) mi = "0" + mi;
         if (s < 10) s = "0" + s;
-        this.date = y + "/" + m + "/" + d + " (" + w + ")";
+        this.date = y + "/" + m + "/" + d + " (" + w + ")  ";
         this.time = h + ":" + mi + ":" + s;
       },
+    //TODO Apiを共通コンポーネントにまとめる
     requestAPI(something){
       switch(something){
         case 'light':
           var payload = '';
+          // TODO プロキシ設定
+          //var url = '/api/infrared_code/';
           var url = 'http://192.168.0.5:5000/api/infrared_code/';
           var status = '';
           if(this.light_state == false){ //onにする
@@ -98,7 +103,7 @@ setInterval(()=>{
   if (d < 10) d = "0" + d;
   if (mi < 10) mi = "0" + mi;
   if (s < 10) s = "0" + s;
-  var date = y + "/" + m + "/" + d + " (" + w + ")";
+  var date = y + "/" + m + "/" + d + " (" + w + ")  ";
   var time = h + ":" + mi + ":" + s;
   document.getElementById("clock_date").innerHTML = date;
   document.getElementById("clock_time").innerHTML = time;
@@ -114,7 +119,7 @@ setInterval(()=>{
 
 .clock_frame, .controlpanel{
   width: 96%;
-  margin: 2%;
+  margin: 10px;
 }
 
 
@@ -122,6 +127,7 @@ setInterval(()=>{
   font-size: 20px;
   color: #fff7f7;
   background: #504f4f;
+  padding: 4px;
 }
 
 

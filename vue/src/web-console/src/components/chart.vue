@@ -22,8 +22,10 @@ export default {
     }
   },
   methods: {
-      //TODO getApiを共通コンポーネントにまとめる
+      //TODO Apiを共通コンポーネントにまとめる
       getApi(fetchnum = 0) {
+        // TODO プロキシ設定
+        // var url = '/api/fetch/'
         var url = 'http://192.168.0.24:13000/api/fetch/'
         if(fetchnum) url += '?fetchnum=' + fetchnum;
         axios.get(url, {

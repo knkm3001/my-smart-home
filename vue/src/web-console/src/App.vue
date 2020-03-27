@@ -5,10 +5,10 @@
     </div>
     <div class='flame'>
       <div class='chart'>
-        <chart msg="Welcome to Your Vue.js App"/>
+        <chart></chart>
       </div>
       <div class='console'>
-        <console msg="Welcome to Your Vue.js App"/>
+        <console></console>
       </div>
     </div>
   </div>

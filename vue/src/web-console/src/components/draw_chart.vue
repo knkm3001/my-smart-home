@@ -15,11 +15,14 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        elements: {
+            line: {
+                tension: 0.3,
+            }},
         scales: {
           xAxes: [{
             scaleLabel: {
-              display: true,
-              labelString: 'date-time'
+              display: true
             },
             gridLines: {
               color: 'rgba(255, 255, 255, 0.3)'
@@ -30,7 +33,7 @@ export default {
             ticks: {
               stepSize: 5,
               max: 30,
-              min: 15,
+              min: 10,
               userCallback: (tick)=> {
                   return tick.toString() + '℃';
                 }
@@ -54,7 +57,7 @@ export default {
             id:'y-axis-hum', //湿度
             ticks: {
               stepSize: 5,
-              max: 55,
+              max: 60,
               min: 40,
               userCallback: (tick)=> {
                   return tick.toString() + '%';
@@ -82,7 +85,7 @@ export default {
 
       // 温度
       var temp_data_set = JSON.parse(JSON.stringify(data_set));
-      temp_data_set.label = 'temp';
+      temp_data_set.label = 'temperature';
       temp_data_set.data = this.fetch_data.map(v => v.data.temp);
       temp_data_set.borderColor = '#ff6347';
       temp_data_set.type = 'line';
@@ -92,7 +95,7 @@ export default {
 
       // 湿度
       var hum_data_set = JSON.parse(JSON.stringify(data_set));
-      hum_data_set.label = 'hum';
+      hum_data_set.label = 'humidity';
       hum_data_set.data = this.fetch_data.map(v => v.data.hum);
       hum_data_set.borderColor = '#00bfff';
       hum_data_set.type = 'line';
@@ -102,12 +105,12 @@ export default {
 
       // 気圧
       var pres_data_set = JSON.parse(JSON.stringify(data_set));
-      pres_data_set.label = 'pres';
+      pres_data_set.label = 'air pressure';
       pres_data_set.data = this.fetch_data.map(v => v.data.pres);
       pres_data_set.borderColor = '#ccf2ff';
       pres_data_set.type = 'bar';
       pres_data_set.yAxisID= "y-axis-pres";
-      pres_data_set.backgroundColor = new Array(this.fetch_data.length).fill('rgba(204 ,242 ,255, 0.8)')
+      pres_data_set.backgroundColor = new Array(this.fetch_data.length).fill('rgba(204 ,242 ,255, 0.5)')
       this.data.datasets.push(pres_data_set);
       
       // x軸
