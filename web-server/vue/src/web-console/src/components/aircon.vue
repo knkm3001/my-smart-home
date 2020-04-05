@@ -1,20 +1,27 @@
 <template>    
-    <a href='javascript:void(0)' v-on:click="change_state()">
+  <div class='flame'>
+    <airconModal v-show='modal' v-on:close-modal='closeModal' :aircondata='aircondata'></airconModal>
+    <a href='javascript:void(0)' v-on:click="openModal">
       <div class='aircon'>
-        <img v-if='aircon_state' alt="aircon logo" src="../assets/aircon_on.png">
+        <img v-if='aircondata.state' alt="aircon logo" src="../assets/aircon_on.png">
         <img v-else alt="aircon logo" src="../assets/aircon_off.png">
         <div class='indicator'>
             <dl>
-                <dt>{{aircon_mode}}</dt>
-                <dd>{{aircon_temp}}℃</dd>
+                <dt>{{aircondata.mode}}</dt>
+                <dd>{{aircondata.degree}}℃</dd>
                 <dt>wind power:</dt>
-                <dd>{{aircon_wind_pawer}}</dd>
+                <dd>{{aircondata.windpawer}}</dd>
                 <dt>wind direction:</dt>
-                <dd>{{aircon_wind_direc}}</dd>
+                <dd>{{aircondata.winddirec}}</dd>
+                <dt>timermode:</dt>
+                <dd>{{aircondata.timermode}}</dd>
+                <dt>timertime:</dt>
+                <dd>{{aircondata.timertime}}</dd>
             </dl>
         </div>
       </div>
     </a>
+  </div>
 </template>
 
 
@@ -22,22 +29,33 @@
 
 <script>
 
+import airconModal from './airconModal.vue'
+
 export default {
   name: 'aircon',
+  components: {
+      airconModal
+  },
   data(){
       return {
-          aircon_state:false,
-          aircon_mode:'cool',
-          aircon_temp: 24,
-          aircon_wind_pawer: 1,
-          aircon_wind_direc: 1,
-          aircon_timer: 0, // 0:使わない 1:on 2:off
-          aircon_timer_time: '00:00'
+        aircondata:{
+          state:false,
+          degree:25,
+          mode:'cool',
+          winddirec:1,
+          windpower:1,
+          timermode:null,
+          timertime:null
+        },
+        modal: false
       }
   },
   methods:{
-      change_state(){
-          this.aircon_state = !this.aircon_state;
+      openModal(){
+          this.modal = true
+      },
+      closeModal(){
+          this.modal = false
       }
   }
 }
@@ -78,4 +96,30 @@ dd{
     margin-left: 1em;
 }
 
+
+#overlay{
+  z-index:1;
+
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0.5);
+  margin:0;
+  border:hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+
+#content{
+  z-index:2;
+  width:50%;
+  padding: 1em;
+  background:#fff;
+}
 </style>
