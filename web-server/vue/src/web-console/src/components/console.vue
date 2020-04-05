@@ -93,7 +93,7 @@ setInterval(()=>{
 }
 
 /* 各コンソール共通 */
-#controlpanel a{
+#controlpanel .flame{
   display: inline-block;
   vertical-align: top;
   background: #504f4f;

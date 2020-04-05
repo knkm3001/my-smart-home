@@ -1,10 +1,12 @@
 <template>
+  <div class='flame'>
     <a id='light_flame' v-on:click="requestAPI('light')" href='javascript:void(0)'>
       <div class='light'>
         <img v-if='light_state' alt="light logo" src="../assets/light_on.png">
         <img v-else alt="light logo" src="../assets/light_off.png">
       </div>
     </a>
+  </div>
 </template>
 
 
@@ -62,7 +64,7 @@ export default {
 
 
 <style scoped>
-a {
+.flame {
     width:25%;
 }
 
