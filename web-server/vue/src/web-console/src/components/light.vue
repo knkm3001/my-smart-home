@@ -27,20 +27,24 @@ export default {
   requestAPI(something){
     switch(something){
       case 'light':
-        var payload = '';
-        var status = '';
-        var url = '/raspi-api/infrared_code/';
+        var payload = null;
+        var status = null;
+        var url = '/express/api/ir-option/';
         if(this.light_state == false){ //onにする
           payload = {
-            "base_time": 583,
-            "signal": [[16, 8], "017620df", [1, 77], [16, 8], "e730e11e", [1, 77], [6, 3], "80080c0af500ff10ef43bc", [1, 62], [6, 3], "344a901484"]
+            "target" : "room_light",
+            "status" : {
+              "power" : 1
             }
+          }
           status = true;
         }else{ //offにする
           payload = {
-            "base_time": 555,
-            "signal": [[16, 8], "017600ff", [1, 1]]
+            "target" : "room_light",
+            "status" : {
+              "power" : 0
             }
+          }
           status = false;
         } 
         break;

@@ -4,6 +4,7 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios'
 import draw_chart from './draw_chart';
@@ -23,7 +24,7 @@ export default {
   },
   methods: {
       getApi(fetchnum = 0) {
-        var url = '/api/fetch'
+        var url = '/express/api/fetch'
         if(fetchnum) url += '?fetchnum=' + fetchnum;
         axios.get(url, {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -41,12 +42,10 @@ export default {
   }
 }
 
-
-
 </script>
 
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 .chart{
   height : 60%;
