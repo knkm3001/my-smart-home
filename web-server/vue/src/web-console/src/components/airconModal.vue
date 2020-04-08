@@ -3,49 +3,49 @@
     <div id='content' v-on:click='stopEvent'>
       <p></p>
       <div class='range-slider'>
-        <input id="rs-range-line" class="rs-range" type="range" min="22" max="28" v-model="aircondata.degree">
-        <span>  {{aircondata.degree}}℃</span>
+        <input id="rs-range-line" class="rs-range" type="range" min="22" max="28" v-model="tmp_status.temp">
+        <span>  {{tmp_status.temp}}℃</span>
       </div>
       <div class='change-mode'>
         <p>
-        <input type="radio" name="mode" value="cool" v-model="aircondata.mode">
-        <input type="radio" name="mode" value="warm" v-model="aircondata.mode">
-        <input type="radio" name="mode" value="dry"  v-model="aircondata.mode">
-        <input type="radio" name="mode" value="wind" v-model="aircondata.mode">
-        <span>  mode： {{aircondata.mode}}</span>
+        <input type="radio" name="mode" value="cool" v-model="tmp_status.mode">
+        <input type="radio" name="mode" value="warm" v-model="tmp_status.mode">
+        <input type="radio" name="mode" value="dry"  v-model="tmp_status.mode">
+        <input type="radio" name="mode" value="blast" v-model="tmp_status.mode">
+        <span>  mode: {{tmp_status.mode}}</span>
         </p>
       </div>
       <div class='wind-direc'>
         <p>
-        <input type="radio" name="wind-direc" value="1"    v-model="aircondata.winddirec">
-        <input type="radio" name="wind-direc" value="2"    v-model="aircondata.winddirec">
-        <input type="radio" name="wind-direc" value="3"    v-model="aircondata.winddirec">
-        <input type="radio" name="wind-direc" value="4"    v-model="aircondata.winddirec">
-        <input type="radio" name="wind-direc" value="5"    v-model="aircondata.winddirec">
-        <input type="radio" name="wind-direc" value="move" v-model="aircondata.winddirec">
-        <input type="radio" name="wind-direc" value="auto" v-model="aircondata.winddirec">
-        <span>  wind-direc: {{aircondata.winddirec}}</span>
+        <input type="radio" name="wind-direc" value=0 v-model="tmp_status.wind.winddirec">
+        <input type="radio" name="wind-direc" value=1 v-model="tmp_status.wind.winddirec">
+        <input type="radio" name="wind-direc" value=2 v-model="tmp_status.wind.winddirec">
+        <input type="radio" name="wind-direc" value=3 v-model="tmp_status.wind.winddirec">
+        <input type="radio" name="wind-direc" value=4 v-model="tmp_status.wind.winddirec">
+        <input type="radio" name="wind-direc" value=5 v-model="tmp_status.wind.winddirec">
+        <input type="radio" name="wind-direc" value=6 v-model="tmp_status.wind.winddirec">
+        <span>  wind-direc: {{tmp_status.wind.winddirec}}</span>
         </p>
       </div>
       <div class='wind-power'>
         <p>
-        <input type="radio" name="wind-power" value="1"     v-model="aircondata.windpower">
-        <input type="radio" name="wind-power" value="2"     v-model="aircondata.windpower">
-        <input type="radio" name="wind-power" value="3"     v-model="aircondata.windpower">
-        <input type="radio" name="wind-power" value="power" v-model="aircondata.windpower">
-        <input type="radio" name="wind-power" value="auto"  v-model="aircondata.windpower">
-        <span>  wind-power: {{aircondata.windpower}}</span>
+        <input type="radio" name="wind-power" value=0 v-model="tmp_status.wind.windpower">
+        <input type="radio" name="wind-power" value=1 v-model="tmp_status.wind.windpower">
+        <input type="radio" name="wind-power" value=2 v-model="tmp_status.wind.windpower">
+        <input type="radio" name="wind-power" value=3 v-model="tmp_status.wind.windpower">
+        <input type="radio" name="wind-power" value=4 v-model="tmp_status.wind.windpower">
+        <span>  wind-power: {{tmp_status.wind.windpower}}</span>
         </p>
       </div>
       <div class='timer'>
         <p>
-        <input type="radio" name="timermode" value="on"  v-model="aircondata.timermode">
-        <input type="radio" name="timermode" value="off" v-model="aircondata.timermode">
-        <span>timer mode: {{aircondata.timermode}}</span>
+        <input type="radio" name="timermode" value=1  v-model="tmp_status.timer.timermode">
+        <input type="radio" name="timermode" value=0  v-model="tmp_status.timer.timermode">
+        <span>timer mode: {{tmp_status.timer.timermode}}</span>
         </p>
         <p>
-        <input type="time" name="timertime" v-model="aircondata.timertime">
-        <span>time: {{aircondata.timertime}}</span>
+        <input type="time" name="timertime" v-model="tmp_status.timer.settime">
+        <span>time: {{tmp_status.timer.settime}}</span>
         </p>
       </div>
       <p><button v-on:click="sendCode">send</button></p>
@@ -57,9 +57,16 @@
 
 
 <script>
+import _ from 'lodash'
+
 export default {
   name: 'airconModal',
-  props:['aircondata'],
+  props: ['status'],
+  data(){
+    return {
+      tmp_status: null
+    }
+  },
   methods:{
     closeModal(){
       this.$emit('close-modal')
@@ -68,11 +75,16 @@ export default {
       event.stopPropagation()
     },
     sendCode(){
-     this.aircondata.state = true
+      this.tmp_status.power = 1
+      this.$emit('updated', this.tmp_status)
     },
     stopAircon(){
-      this.aircondata.state = false
+      this.tmp_status.power = 0
+      this.$emit('updated', this.tmp_status)
     }
+  },
+  created(){
+    this.tmp_status = _.cloneDeep(this.status)
   }
 }
 

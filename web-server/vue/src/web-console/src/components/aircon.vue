@@ -1,22 +1,22 @@
 <template>    
   <div class='flame'>
-    <airconModal v-show='modal' v-on:close-modal='closeModal' :aircondata='aircondata'></airconModal>
+    <airconModal v-if='modal' v-on:close-modal='closeModal' :status='status' @updated='updateAirconData'></airconModal>
     <a href='javascript:void(0)' v-on:click="openModal">
       <div class='aircon'>
-        <img v-if='aircondata.state' alt="aircon logo" src="../assets/aircon_on.png">
+        <img v-if='status.power' alt="aircon logo" src="../assets/aircon_on.png">
         <img v-else alt="aircon logo" src="../assets/aircon_off.png">
         <div class='indicator'>
             <dl>
-                <dt>{{aircondata.mode}}</dt>
-                <dd>{{aircondata.degree}}℃</dd>
+                <dt>{{status.mode}}</dt>
+                <dd>{{status.temp}}℃</dd>
                 <dt>wind power:</dt>
-                <dd>{{aircondata.windpawer}}</dd>
+                <dd>{{status.wind.windpower}}</dd>
                 <dt>wind direction:</dt>
-                <dd>{{aircondata.winddirec}}</dd>
+                <dd>{{status.wind.winddirec}}</dd>
                 <dt>timermode:</dt>
-                <dd>{{aircondata.timermode}}</dd>
+                <dd>{{status.timermode}}</dd>
                 <dt>timertime:</dt>
-                <dd>{{aircondata.timertime}}</dd>
+                <dd>{{status.timertime}}</dd>
             </dl>
         </div>
       </div>
@@ -30,6 +30,7 @@
 <script>
 
 import airconModal from './airconModal.vue'
+import axios from 'axios'
 
 export default {
   name: 'aircon',
@@ -38,24 +39,49 @@ export default {
   },
   data(){
       return {
-        aircondata:{
-          state:false,
-          degree:25,
-          mode:'cool',
-          winddirec:1,
-          windpower:1,
-          timermode:null,
-          timertime:null
-        },
+        status:{
+          power : 0,
+          mode : "dry",
+          temp : 24,
+          wind : 
+            {
+            windpower:2,
+            winddirec:1
+            },
+          timer:{
+            settimer:0,
+            timermode:"",
+            settime:""
+            }
+          },
         modal: false
       }
   },
   methods:{
       openModal(){
-          this.modal = true
+        this.modal = true
       },
       closeModal(){
-          this.modal = false
+        this.modal = false
+      },
+      updateAirconData(tmp_status){
+        this.status = tmp_status
+        console.log('new status')
+        console.dir(this.status)
+        var url = '/express/api/ir-option/';
+        var payload = {
+          "target":"aircon",
+          "status":this.status
+        }
+        axios.post(url, payload, {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Access-Control-Allow-Origin': '*',
+        })
+          .then(() => {
+            this.light_state = status;
+          }).catch(err => {
+            this.fetch_data = err;
+          });
       }
   }
 }
