@@ -47,7 +47,7 @@ const setData6 = function(v){
             return '4c';
             break;
         case 'warm':
-        case 'wind':
+        case 'blast':
             return '0c';
             break;
     }
