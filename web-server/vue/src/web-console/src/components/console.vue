@@ -101,10 +101,6 @@ setInterval(()=>{
   height: 100px;
 }
 
-#controlpanel a:hover{
-  background-color: #747272;
-}
-
 #light {
   float:left;
 }
