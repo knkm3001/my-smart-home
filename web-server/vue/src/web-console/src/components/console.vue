@@ -97,16 +97,18 @@ setInterval(()=>{
   display: inline-block;
   vertical-align: top;
   background: #504f4f;
-  padding: 2px;
+  padding: 3px;
   height: 100px;
 }
 
 #light {
   float:left;
+  width: 23%;
 }
 
 #aircon {
   float:right;
+  width: 72%;
 }
 
 
