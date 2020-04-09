@@ -56,9 +56,9 @@ export default {
           },{
             id:'y-axis-hum', //湿度
             ticks: {
-              stepSize: 5,
-              max: 60,
-              min: 40,
+              stepSize: 10,
+              max: 70,
+              min: 30,
               userCallback: (tick)=> {
                   return tick.toString() + '%';
                 }

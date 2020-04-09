@@ -7,5 +7,5 @@ RUN chmod 777 ./*
 
 RUN npm install
 
+RUN npm start
 
-CMD [ "npm", "start" ]

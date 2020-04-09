@@ -53,14 +53,18 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => console.log('DB connection successful'));
 
 
+// raspiへの赤外線信号の処理用
+const request2raspi = require('./models/request2raspi');
+const aircon = require('./models/aircon'); 
+const room_light = require('./models/room_light'); 
+
 app.get('/', (req, res) => {
   res.render("index",{});
 });
 
 
-
-// post データ登録
-app.post('/api/register/', (req, res) => {
+// post raspiからの部屋のデータ登録
+app.post('/express/api/register/', (req, res) => {
     console.log(req.body);
     var roomdata_instance = new Roomdata(req.body);
     roomdata_instance.save(function (err) {
@@ -69,16 +73,16 @@ app.post('/api/register/', (req, res) => {
     res.send('POST is sended.');
   });
 
-// get データ取得
-app.get('/api/fetch/', (req, res) => {
+// get raspiからの部屋のデータデータ取得
+app.get('/express/api/fetch/', (req, res) => {
   var fetchnum = req.query.fetchnum;
   var num = (typeof parseInt(fetchnum,10) == 'number' && parseInt(fetchnum,10) > 0) ? parseInt(fetchnum,10) : 24
   Roomdata.find(
     {}, // フィルター
     [], // カラム
     {
-      limit:num,
-      sort: {createdAt:-1}
+      limit : num,
+      sort : {createdAt:-1}
     }
     )
     .then((data) => {
@@ -86,6 +90,24 @@ app.get('/api/fetch/', (req, res) => {
     })
 });
 
+
+// post raspiへの赤外線信号送信
+app.post('/express/api/ir-option/', (req, res) => {
+  console.log(req.body);
+  let payload;
+  switch(req.body.target){
+    case 'room_light':
+      payload = room_light.convertToIRData(req.body.status)
+      request2raspi.execIRCodes(payload);
+      break;
+    case 'aircon':
+      payload = aircon.convertToIRData(req.body.status)
+      console.dir(payload)
+      request2raspi.execIRCodes(payload);
+      break;
+  }
+  res.send('POST is sended.');
+});
 
 
 app.listen(PORT, HOST);
