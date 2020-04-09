@@ -3,8 +3,8 @@
     <airconModal v-if='modal' v-on:close-modal='closeModal' :status='status' @updated='updateAirconData'></airconModal>
     <a href='javascript:void(0)' v-on:click="openModal">
       <div class='aircon'>
-        <img v-if='status.power' alt="aircon logo" src="../assets/aircon_on.png">
-        <img v-else alt="aircon logo" src="../assets/aircon_off.png">
+        <img v-if='status.power' alt="aircon logo" src="/img/aircon_on.png">
+        <img v-else alt="aircon logo" src="/img/aircon_off.png">
         <div class='indicator'>
             <dl>
                 <dt>{{status.mode}}</dt>
@@ -31,6 +31,7 @@
 
 import airconModal from './airconModal.vue'
 import axios from 'axios'
+import _ from 'lodash'
 
 export default {
   name: 'aircon',
@@ -65,7 +66,7 @@ export default {
         this.modal = false
       },
       updateAirconData(tmp_status){
-        this.status = tmp_status
+        this.status = _.cloneDeep(tmp_status)
         console.log('new status')
         console.dir(this.status)
         var url = '/express/api/ir-option/';
