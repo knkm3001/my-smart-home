@@ -5,19 +5,19 @@
       <div class='aircon'>
         <img v-if='status.power' alt="aircon logo" src="/img/aircon_on.png">
         <img v-else alt="aircon logo" src="/img/aircon_off.png">
-        <div class='indicator'>
-            <dl>
-                <dt>{{status.mode}}</dt>
-                <dd>{{status.temp}}℃</dd>
-                <dt>wind power:</dt>
-                <dd>{{status.wind.windpower}}</dd>
-                <dt>wind direction:</dt>
-                <dd>{{status.wind.winddirec}}</dd>
-                <dt>timermode:</dt>
-                <dd>{{status.timermode}}</dd>
-                <dt>timertime:</dt>
-                <dd>{{status.timertime}}</dd>
-            </dl>
+        <div class='aircon-status'>
+          <div v-if='status.timer.settimer || status.power'>
+            <div class='show-status'>
+              <div><img :src='imgs.mode'></div>
+              <div><p>{{status.temp}}℃</p></div>
+              <div><img :src='imgs.direc'></div>
+              <div><img :src='imgs.wpower'></div>
+            </div>
+            <div class='show-timer'>
+                <p>{{showOnOff}}</p>
+                <p>time : <br>{{status.timer.settime}}</p>
+            </div>
+          </div>
         </div>
       </div>
     </a>
@@ -40,6 +40,8 @@ export default {
   },
   data(){
       return {
+        modal: false,
+        imgs: null,
         status:{
           power : 0,
           mode : "dry",
@@ -54,8 +56,7 @@ export default {
             timermode:"",
             settime:""
             }
-          },
-        modal: false
+        }
       }
   },
   methods:{
@@ -66,7 +67,8 @@ export default {
         this.modal = false
       },
       updateAirconData(tmp_status){
-        this.status = _.cloneDeep(tmp_status)
+        this.status = _.cloneDeep(tmp_status.status)
+        this.imgs = _.cloneDeep(tmp_status.imgs)
         console.log('new status')
         console.dir(this.status)
         var url = '/express/api/ir-option/';
@@ -84,45 +86,24 @@ export default {
             this.fetch_data = err;
           });
       }
+  },
+  computed : {
+    showOnOff: function(){
+      return this.status.timer.timermode ? 'ON' : 'OFF'
+    }
   }
 }
 
 </script>
 
 <style scoped>
-a {
-    width:70%;
-}
 
-.indicator{
-    width: 40%;
-    height: 100px;
-    display: inline-block;
-    background-color: #696767;
-    border-radius: 2px;
-    color:aliceblue;
-}
-
-img {
+.aircon > img {
     max-width: 45%;
     max-height: 100px;
     float : left;
     margin : auto 10px;
 }
-
-
-
-dt{
-    float:left;
-    clear:left;
-    width: 120px;
-}
-
-dd{
-    float: left;
-    margin-left: 1em;
-}
-
 
 #overlay{
   z-index:1;
@@ -142,7 +123,54 @@ dd{
 
 }
 
+/** aircon  */
 
+.aircon-status{
+  width: 45%;
+  height: 100px;
+  display: inline-block;
+  background-color: #696767;
+  border-radius: 2px;
+  color:aliceblue;
+}
+
+.show-status{
+  float: left;
+  width: 70%;
+  height: 100px;
+}
+
+.show-status div{
+  width: 48%;
+  height: 50%;
+  float: left;
+  text-align:center;
+}
+
+.show-status p{
+  font-size: 1.2em;
+  line-height: 18px;
+  text-align:center;
+  color: #FFF;
+}
+
+.show-status img{
+  padding: 4%;
+  max-height: 42px;
+}
+
+.show-timer{
+  float: right;
+  width: 30%;
+  height: 100px;
+}
+
+.show-timer span{
+  text-align:center;
+  margin:0 auto;
+}
+
+/** modal */
 #content{
   z-index:2;
   width:50%;

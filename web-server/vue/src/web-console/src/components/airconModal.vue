@@ -3,10 +3,9 @@
     <div id='content' v-on:click='stopEvent'>
       
       <div id='range-slider'>
-        <p>
-        <input id="rs-range-line" class="rs-range" type="range" min="22" max="28" v-model="tmp_status.temp">
-        <span>  {{tmp_status.temp}}℃</span>
-        </p>
+        <label class='temp-chr'>
+        <input id="rs-range-line" class="rs-range" type="range" min="21" max="29" v-model="tmp_status.temp">
+        {{tmp_status.temp}}℃</label>
       </div>
 
       <div id='mode'>
@@ -27,7 +26,7 @@
         <div id='wind-power' class='wind-botton'>
           <a href='javascript:void(0)' v-on:click="chengePowerImg()">
             <img src='/img/aircon_windpower/wind.png'>
-            <img :src="power_imgs[windpower_cntr]">
+            <img :src="wpower_imgs[wpower_cntr]">
           </a>
         </div>
       </div>
@@ -35,7 +34,7 @@
       <div id='timer'>
         <div id='is-use-timer' class="cp_ipcheck">
           <input type="checkbox" id="c_ch1" v-model='tmp_status.timer.settimer'>
-          <label for="c_ch1">Timer:&nbsp;&nbsp;&nbsp;</label>
+          <label for="c_ch1">Timer:</label>
         </div>
         <div class="timer-zone" v-show='tmp_status.timer.settimer'>
           <span class="cp_ipcheck cp_ipcheck2">
@@ -71,7 +70,7 @@ export default {
     return {
       tmp_status : null,
       direc_cntr : 0,
-      windpower_cntr : 0,
+      wpower_cntr : 0,
       mode_types : {
         'cool' : '/img/aircon_mode/cool.png',
         'warm' : '/img/aircon_mode/warm.png',
@@ -87,7 +86,7 @@ export default {
         5 : '/img/aircon_direcs/swing.png',
         6 : '/img/aircon_direcs/auto.png'
       },
-      power_imgs : {
+      wpower_imgs : {
         0 : '/img/aircon_windpower/windpower_1.png',
         1 : '/img/aircon_windpower/windpower_2.png',
         2 : '/img/aircon_windpower/windpower_3.png',
@@ -104,21 +103,37 @@ export default {
     },
     sendCode(){
       this.tmp_status.power = 1
-      this.$emit('updated', this.tmp_status)
+      this.$emit('updated', 
+      {
+        "status":this.tmp_status,
+        "imgs":{
+          "direc" : this.direc_imgs[this.direc_cntr],
+          "wpower" : this.wpower_imgs[this.wpower_cntr],
+          "mode" : this.mode_types[this.tmp_status.mode]
+        }
+      })
     },
     stopAircon(){
       this.tmp_status.power = 0
-      this.$emit('updated', this.tmp_status)
+      this.$emit('updated', 
+      {
+        "status":this.tmp_status,
+        "imgs":{
+          "direc" : this.direc_imgs[this.direc_cntr],
+          "wpower" : this.wpower_imgs[this.wpower_cntr],
+          "mode" : this.mode_types[this.tmp_status.mode]
+        }
+      })
     },
     chengeDirecImg(){
-    this.direc_cntr +=1
-    if(this.direc_cntr > 6) this.direc_cntr = 0
-    this.tmp_status.wind.winddirec = this.direc_cntr
+      this.direc_cntr +=1
+      if(this.direc_cntr > 6) this.direc_cntr = 0
+      this.tmp_status.wind.winddirec = this.direc_cntr
     },
     chengePowerImg(){
-    this.windpower_cntr +=1
-    if(this.windpower_cntr > 3) this.windpower_cntr = 0
-    this.tmp_status.wind.windpower = this.windpower_cntr
+      this.wpower_cntr +=1
+      if(this.wpower_cntr > 3) this.wpower_cntr = 0
+      this.tmp_status.wind.windpower = this.wpower_cntr
     }
   },
   created(){
@@ -147,20 +162,54 @@ export default {
 
 #content{
   border-color: #ffffff;
-  border-width: 1px;
+  border-width: 2px;
   z-index:2;
-  width:40%;
-  height:40%;
+  min-width:40%;
+  height:50%;
   padding: 1em;
-  background: rgba(182, 179, 179, 0.8);
+  background: rgba(99, 97, 97, 0.8);
 }
 
-#timer label{
-  font-size: 18px;
+
+/** common */
+#mode img:hover, #wind div:hover{
+  background: rgba(204, 203, 203, 0.4);
+  border-radius: 5px;
+}
+
+
+/** range */
+#range-slider{
+  margin-top: 10px;
+}
+
+input[type=range] {
+  -webkit-appearance:none;
+  height:4px;
+  width:240px;
+  border-radius:4px;
+  margin-right: 8px;
+}
+
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  background:rgb(255, 255, 255);
+  height:16px;
+  width:16px;
+  border-radius:50%;
+}
+
+.temp-chr{
+  font-size: 20px;
   padding: 0.5em 1em;
   text-decoration: none;
   color: #FFF;
-  border-radius: 3px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  left: 30px;
 }
 
 /** mode */
@@ -178,12 +227,8 @@ export default {
 }
 
 input[type="radio"]:checked + img{
-  background: rgba(116, 114, 114,0.8);
-}
-
-#mode img:hover{
-  transition: 0.3s ;
-  background-color: rgba(116, 114, 114,0.8);
+  background: rgba(204, 203, 203, 0.8);
+  border-radius: 5px;
 }
 
 .mode-button img{
@@ -223,12 +268,6 @@ input[type="radio"]:checked + img{
 
 #wind-power img{
   height: 70px;
-}
-
-
-#wind div:hover{
-  transition: 0.3s ;
-  background-color: rgba(116, 114, 114,0.8);
 }
 
 /** send-bottun */
@@ -273,6 +312,20 @@ input[type="radio"]:checked + img{
   margin-right: 30%;
   margin-left: 30%;
 }
+
+#timer label{
+  font-size: 18px;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  color: #FFF;
+  border-radius: 3px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
 
 
 #is-use-timer{
