@@ -44,12 +44,12 @@ export default {
         imgs: null,
         status:{
           power : 0,
-          mode : "cool",
-          temp : 24,
+          mode : 'cool',
+          temp : 25,
           wind : 
             {
             windpower:0,
-            winddirec:0
+            winddirec:0,
             },
           timer:{
             settimer:0,

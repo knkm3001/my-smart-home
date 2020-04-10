@@ -137,7 +137,9 @@ export default {
     }
   },
   created(){
-    this.tmp_status = _.cloneDeep(this.status)
+    this.tmp_status  = _.cloneDeep(this.status)
+    this.direc_cntr  = this.tmp_status.wind.winddirec
+    this.wpower_cntr = this.tmp_status.wind.windpower
   }
 }
 
