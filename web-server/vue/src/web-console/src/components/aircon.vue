@@ -6,14 +6,14 @@
         <img v-if='status.power' alt="aircon logo" src="/img/aircon_on.png">
         <img v-else alt="aircon logo" src="/img/aircon_off.png">
         <div class='aircon-status'>
-          <div v-if='status.timer.settimer || status.power'>
+          <div v-if='status.power || (status.timer.timermode == 1 && status.timer.settime)'>
             <div class='show-status'>
               <div><img :src='imgs.mode'></div>
               <div><p>{{status.temp}}℃</p></div>
               <div><img :src='imgs.direc'></div>
               <div><img :src='imgs.wpower'></div>
             </div>
-            <div class='show-timer'>
+            <div class='show-timer' v-show='status.timer.settimer && status.timer.settime'>
                 <p>{{showOnOff}}</p>
                 <p>time : <br>{{status.timer.settime}}</p>
             </div>
@@ -44,17 +44,17 @@ export default {
         imgs: null,
         status:{
           power : 0,
-          mode : "dry",
+          mode : "cool",
           temp : 24,
           wind : 
             {
-            windpower:2,
-            winddirec:1
+            windpower:0,
+            winddirec:0
             },
           timer:{
             settimer:0,
-            timermode:"",
-            settime:""
+            timermode:null,
+            settime:null
             }
         }
       }
