@@ -49,8 +49,8 @@
       </div>
 
       <div id='send-bottun'>
-        <a href="javascript:void(0)" class="btn-square stop" v-on:click="stopAircon">stop</a>
-        <a href="javascript:void(0)" class="btn-square send" v-on:click="sendCode">send</a>
+        <a href="javascript:void(0)" class="btn-square stop" v-on:click="updataStatus(0)">stop</a>
+        <a href="javascript:void(0)" class="btn-square send" v-on:click="updataStatus(1)">send</a>
       </div>
 
 
@@ -82,13 +82,8 @@ export default {
     stopEvent(){
       event.stopPropagation()
     },
-    sendCode(){
-      this.tmp_status.power = 1 
-      this.$store.commit('updateHomeApplianceStatus',{target:'aircon', update_status:this.tmp_status})
-      this.sendData(this.tmp_status)
-    },
-    stopAircon(){
-      this.tmp_status.power = 0
+    updataStatus(option){
+      this.tmp_status.power = option  // 0:off, 1:on
       this.$store.commit('updateHomeApplianceStatus',{target:'aircon', update_status:this.tmp_status})
       this.sendData(this.tmp_status)
     },
@@ -112,10 +107,10 @@ export default {
           'Content-Type': 'application/json;charset=UTF-8',
           'Access-Control-Allow-Origin': '*',
         })
-          .then(() => {
-            this.light_state = status;
+          .then(res => {
+            console.log(res)
           }).catch(err => {
-            this.fetch_data = err;
+            console.log(err)
           });
       }
   },
