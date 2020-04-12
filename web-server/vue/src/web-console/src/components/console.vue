@@ -15,6 +15,7 @@
 import light from './light.vue'
 import aircon from './aircon.vue'
 
+
 export default {
   name: 'console',
   components: {

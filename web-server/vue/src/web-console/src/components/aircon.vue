@@ -1,27 +1,28 @@
 <template>    
   <div class='flame'>
-    <airconModal v-if='modal' v-on:close-modal='closeModal' :status='status' @updated='updateAirconData'></airconModal>
+    <airconModal v-if='modal' v-on:close-modal='closeModal' :imgs='imgs'></airconModal>
     <a href='javascript:void(0)' v-on:click="openModal">
       <div class='aircon'>
-        <img v-if='status.power' alt="aircon logo" src="/img/aircon_on.png">
+        <img v-if='aircon_status.power' alt="aircon logo" src="/img/aircon_on.png">
         <img v-else alt="aircon logo" src="/img/aircon_off.png">
         <div class='aircon-status'>
-          <div v-if='status.timer.settimer || status.power'>
+          <div v-if='aircon_status.power || (aircon_status.timer.timermode == 1 && aircon_status.timer.settime)'>
             <div class='show-status'>
-              <div><img :src='imgs.mode'></div>
-              <div><p>{{status.temp}}℃</p></div>
-              <div><img :src='imgs.direc'></div>
-              <div><img :src='imgs.wpower'></div>
+              <div><img :src='this.imgs.mode_types[aircon_status.mode]'></div>
+              <div><p>{{aircon_status.temp}}℃</p></div>
+              <div><img :src='this.imgs.direc_imgs[aircon_status.wind.winddirec]'></div>
+              <div><img :src='this.imgs.wpower_imgs[aircon_status.wind.windpower]'></div>
             </div>
-            <div class='show-timer'>
+            <div class='show-timer' v-show='aircon_status.timer.settimer && aircon_status.timer.settime'>
                 <p>{{showOnOff}}</p>
-                <p>time : <br>{{status.timer.settime}}</p>
+                <p>time : <br>{{aircon_status.timer.settime}}</p>
             </div>
           </div>
         </div>
       </div>
     </a>
   </div>
+
 </template>
 
 
@@ -30,8 +31,7 @@
 <script>
 
 import airconModal from './airconModal.vue'
-import axios from 'axios'
-import _ from 'lodash'
+import { mapState } from "vuex";
 
 export default {
   name: 'aircon',
@@ -41,21 +41,28 @@ export default {
   data(){
       return {
         modal: false,
-        imgs: null,
-        status:{
-          power : 0,
-          mode : "dry",
-          temp : 24,
-          wind : 
-            {
-            windpower:2,
-            winddirec:1
-            },
-          timer:{
-            settimer:0,
-            timermode:"",
-            settime:""
-            }
+        imgs:{       
+          mode_types : {
+          'cool' : '/img/aircon_mode/cool.png',
+          'warm' : '/img/aircon_mode/warm.png',
+          'dry'  : '/img/aircon_mode/dry.png',
+          'blast': '/img/aircon_mode/blast.png'
+          },
+          direc_imgs : {
+            0 : '/img/aircon_direcs/right_above.png',
+            1 : '/img/aircon_direcs/above.png',
+            2 : '/img/aircon_direcs/middle.png',
+            3 : '/img/aircon_direcs/below.png',
+            4 : '/img/aircon_direcs/right_below.png',
+            5 : '/img/aircon_direcs/swing.png',
+            6 : '/img/aircon_direcs/auto.png'
+          },
+          wpower_imgs : {
+            0 : '/img/aircon_windpower/windpower_1.png',
+            1 : '/img/aircon_windpower/windpower_2.png',
+            2 : '/img/aircon_windpower/windpower_3.png',
+            3 : '/img/aircon_windpower/windpower_auto.png'
+          }
         }
       }
   },
@@ -65,31 +72,14 @@ export default {
       },
       closeModal(){
         this.modal = false
-      },
-      updateAirconData(tmp_status){
-        this.status = _.cloneDeep(tmp_status.status)
-        this.imgs = _.cloneDeep(tmp_status.imgs)
-        console.log('new status')
-        console.dir(this.status)
-        var url = '/express/api/ir-option/';
-        var payload = {
-          "target":"aircon",
-          "status":this.status
-        }
-        axios.post(url, payload, {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Access-Control-Allow-Origin': '*',
-        })
-          .then(() => {
-            this.light_state = status;
-          }).catch(err => {
-            this.fetch_data = err;
-          });
       }
   },
   computed : {
-    showOnOff: function(){
-      return this.status.timer.timermode ? 'ON' : 'OFF'
+    ...mapState({
+        aircon_status: state => state.home_appliance_status.aircon
+    }),
+    showOnOff(){
+      return this.$store.state.home_appliance_status.timer.timermode ? 'ON' : 'OFF'
     }
   }
 }

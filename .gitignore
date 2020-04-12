@@ -9,7 +9,10 @@ test.py
 launch.json
 settings.json
 debug_tools/
-package-lock.json
-/web-server/express/src/node_modules/
+
+.vscode
+raspi/init.sh
+
 /web-server/mongo/db/
-/web-server/vue/src/node_modules/
+web-server/express/src/node_modules/
+web-server/vue/src/node_modules/
