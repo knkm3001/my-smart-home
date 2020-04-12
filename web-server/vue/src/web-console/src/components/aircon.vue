@@ -6,26 +6,16 @@
         <img v-if='aircon_status.power' alt="aircon logo" src="/img/aircon_on.png">
         <img v-else alt="aircon logo" src="/img/aircon_off.png">
         <div class='aircon-status'>
-<<<<<<< HEAD
-          <div v-if='status.power || (status.timer.timermode == 1 && status.timer.settime)'>
-=======
           <div v-if='aircon_status.power || (aircon_status.timer.timermode == 1 && aircon_status.timer.settime)'>
->>>>>>> dev
             <div class='show-status'>
               <div><img :src='this.imgs.mode_types[aircon_status.mode]'></div>
               <div><p>{{aircon_status.temp}}℃</p></div>
               <div><img :src='this.imgs.direc_imgs[aircon_status.wind.winddirec]'></div>
               <div><img :src='this.imgs.wpower_imgs[aircon_status.wind.windpower]'></div>
             </div>
-<<<<<<< HEAD
-            <div class='show-timer' v-show='status.timer.settimer && status.timer.settime'>
-                <p>{{showOnOff}}</p>
-                <p>time : <br>{{status.timer.settime}}</p>
-=======
             <div class='show-timer' v-show='aircon_status.timer.settimer && aircon_status.timer.settime'>
                 <p>{{showTimerStatus}}</p>
                 <p>time : <br>{{aircon_status.timer.settime}}</p>
->>>>>>> dev
             </div>
           </div>
         </div>
