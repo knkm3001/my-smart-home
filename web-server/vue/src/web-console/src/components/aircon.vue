@@ -1,7 +1,7 @@
 <template>    
   <div class='flame'>
     <airconModal v-if='modal' v-on:close-modal='closeModal' :imgs='imgs'></airconModal>
-    <a href='javascript:void(0)' v-on:click="openModal">
+    <a href='javascript:void(0)' v-on:click='openModal'>
       <div class='aircon'>
         <img v-if='aircon_status.power' alt="aircon logo" src="/img/aircon_on.png">
         <img v-else alt="aircon logo" src="/img/aircon_off.png">
@@ -14,7 +14,7 @@
               <div><img :src='this.imgs.wpower_imgs[aircon_status.wind.windpower]'></div>
             </div>
             <div class='show-timer' v-show='aircon_status.timer.settimer && aircon_status.timer.settime'>
-                <p>{{showOnOff}}</p>
+                <p>{{showTimerStatus}}</p>
                 <p>time : <br>{{aircon_status.timer.settime}}</p>
             </div>
           </div>
@@ -78,8 +78,8 @@ export default {
     ...mapState({
         aircon_status: state => state.home_appliance_status.aircon
     }),
-    showOnOff(){
-      return this.$store.state.home_appliance_status.timer.timermode ? 'ON' : 'OFF'
+    showTimerStatus(){
+      return this.aircon_status.timer.timermode ? 'ON' : 'OFF'
     }
   }
 }

@@ -20,7 +20,7 @@
       <div id='wind'>
         <div id='wind-direc' class='wind-botton'>
           <a href='javascript:void(0)' v-on:click="chengeDirecImg()">
-            <img :src="imgs.direc_imgs[direc_cntr]">
+            <img :src="imgs.direc_imgs[wdirec_cntr]">
           </a>
         </div>
         <div id='wind-power' class='wind-botton'>
@@ -64,13 +64,14 @@
 import _ from 'lodash'
 import axios from 'axios'
 
+
 export default {
   name: 'airconModal',
   props: ['imgs'],
   data(){
     return {
       tmp_status : null,
-      direc_cntr : 0,
+      wdirec_cntr : 0,
       wpower_cntr : 0
     }
   },
@@ -82,36 +83,31 @@ export default {
       event.stopPropagation()
     },
     sendCode(){
-      this.tmp_status.power = 1
-      this.$store.commit('updateHomeApplianceStatus',{target:'aircon', status:this.tmp_status})
-      console.log('updated status')
-      console.dir(this.$store.state.home_appliance_status.aircon)
-      this.updateAirconData(this.$store.state.home_appliance_status.aircon)
+      this.tmp_status.power = 1 
+      this.$store.commit('updateHomeApplianceStatus',{target:'aircon', update_status:this.tmp_status})
+      this.sendData(this.tmp_status)
     },
     stopAircon(){
       this.tmp_status.power = 0
-      this.$store.commit('updateHomeApplianceStatus',{target:'aircon', status:this.tmp_status})
-      console.log('updated status')
-      console.dir(this.$store.state.home_appliance_status.aircon)
-      this.updateAirconData(this.$store.state.home_appliance_status.aircon)
+      this.$store.commit('updateHomeApplianceStatus',{target:'aircon', update_status:this.tmp_status})
+      this.sendData(this.tmp_status)
     },
     chengeDirecImg(){
-      this.direc_cntr +=1
-      if(this.direc_cntr > 6) this.direc_cntr = 0
-      this.tmp_status.wind.wind
+      this.wdirec_cntr +=1
+      if(this.wdirec_cntr > 6) this.wdirec_cntr = 0
+      this.tmp_status.wind.winddirec = this.wdirec_cntr
     },
     chengePowerImg(){
       this.wpower_cntr +=1
       if(this.wpower_cntr > 3) this.wpower_cntr = 0
       this.tmp_status.wind.windpower = this.wpower_cntr
     },
-    updateAirconData(status){
+    sendData(status){
         var url = '/express/api/ir-option/';
         var payload = {
           "target":"aircon",
           "status":status
         }
-        
         axios.post(url, payload, {
           'Content-Type': 'application/json;charset=UTF-8',
           'Access-Control-Allow-Origin': '*',
@@ -125,7 +121,7 @@ export default {
   },
   created(){
     this.tmp_status  = _.cloneDeep(this.$store.state.home_appliance_status.aircon)
-    this.direc_cntr  = this.tmp_status.wind.winddirec
+    this.wdirec_cntr  = this.tmp_status.wind.winddirec
     this.wpower_cntr = this.tmp_status.wind.windpower
   }
 }

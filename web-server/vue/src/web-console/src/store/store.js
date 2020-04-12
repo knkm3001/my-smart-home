@@ -9,12 +9,12 @@ export default new Vuex.Store({
     home_appliance_status:{
         aircon:{
             power : 0,
-            mode : "dry",
+            mode : 'cool',
             temp : 24,
             wind : 
               {
-              windpower:2,
-              winddirec:1
+              windpower:0,
+              winddirec:0
               },
             timer:{
               settimer:0,
@@ -27,7 +27,7 @@ export default new Vuex.Store({
   },
   mutations: {
     updateHomeApplianceStatus(state,payload){
-        state.home_appliance_status.aircon = payload.aircon_status
+        state.home_appliance_status.aircon = payload.update_status
     }
   },
 
