@@ -9,7 +9,7 @@
       </div>
 
       <div id='mode'>
-        <div v-for="(image,id) in mode_types" :key="id" class='mode-button'>
+        <div v-for="(image,id) in imgs.mode_types" :key="id" class='mode-button'>
           <label>
             <input type="radio" name="mode" :value="id" v-model="tmp_status.mode">
             <img :src="image">
@@ -20,13 +20,13 @@
       <div id='wind'>
         <div id='wind-direc' class='wind-botton'>
           <a href='javascript:void(0)' v-on:click="chengeDirecImg()">
-            <img :src="direc_imgs[direc_cntr]">
+            <img :src="imgs.direc_imgs[wdirec_cntr]">
           </a>
         </div>
         <div id='wind-power' class='wind-botton'>
           <a href='javascript:void(0)' v-on:click="chengePowerImg()">
             <img src='/img/aircon_windpower/wind.png'>
-            <img :src="wpower_imgs[wpower_cntr]">
+            <img :src="imgs.wpower_imgs[wpower_cntr]">
           </a>
         </div>
       </div>
@@ -49,8 +49,8 @@
       </div>
 
       <div id='send-bottun'>
-        <a href="javascript:void(0)" class="btn-square stop" v-on:click="stopAircon">stop</a>
-        <a href="javascript:void(0)" class="btn-square send" v-on:click="sendCode">send</a>
+        <a href="javascript:void(0)" class="btn-square stop" v-on:click="updataStatus(0)">stop</a>
+        <a href="javascript:void(0)" class="btn-square send" v-on:click="updataStatus(1)">send</a>
       </div>
 
 
@@ -62,36 +62,17 @@
 
 <script>
 import _ from 'lodash'
+import axios from 'axios'
+
 
 export default {
   name: 'airconModal',
-  props: ['status'],
+  props: ['imgs'],
   data(){
     return {
       tmp_status : null,
-      direc_cntr : 0,
-      wpower_cntr : 0,
-      mode_types : {
-        'cool' : '/img/aircon_mode/cool.png',
-        'warm' : '/img/aircon_mode/warm.png',
-        'dry'  : '/img/aircon_mode/dry.png',
-        'blast': '/img/aircon_mode/blast.png'
-      },
-      direc_imgs : {
-        0 : '/img/aircon_direcs/right_above.png',
-        1 : '/img/aircon_direcs/above.png',
-        2 : '/img/aircon_direcs/middle.png',
-        3 : '/img/aircon_direcs/below.png',
-        4 : '/img/aircon_direcs/right_below.png',
-        5 : '/img/aircon_direcs/swing.png',
-        6 : '/img/aircon_direcs/auto.png'
-      },
-      wpower_imgs : {
-        0 : '/img/aircon_windpower/windpower_1.png',
-        1 : '/img/aircon_windpower/windpower_2.png',
-        2 : '/img/aircon_windpower/windpower_3.png',
-        3 : '/img/aircon_windpower/windpower_auto.png'
-      }
+      wdirec_cntr : 0,
+      wpower_cntr : 0
     }
   },
   methods:{
@@ -101,44 +82,41 @@ export default {
     stopEvent(){
       event.stopPropagation()
     },
-    sendCode(){
-      this.tmp_status.power = 1
-      this.$emit('updated', 
-      {
-        "status":this.tmp_status,
-        "imgs":{
-          "direc" : this.direc_imgs[this.direc_cntr],
-          "wpower" : this.wpower_imgs[this.wpower_cntr],
-          "mode" : this.mode_types[this.tmp_status.mode]
-        }
-      })
-    },
-    stopAircon(){
-      this.tmp_status.power = 0
-      this.$emit('updated', 
-      {
-        "status":this.tmp_status,
-        "imgs":{
-          "direc" : this.direc_imgs[this.direc_cntr],
-          "wpower" : this.wpower_imgs[this.wpower_cntr],
-          "mode" : this.mode_types[this.tmp_status.mode]
-        }
-      })
+    updataStatus(option){
+      this.tmp_status.power = option  // 0:off, 1:on
+      this.$store.commit('updateHomeApplianceStatus',{target:'aircon', update_status:this.tmp_status})
+      this.sendData(this.tmp_status)
     },
     chengeDirecImg(){
-      this.direc_cntr +=1
-      if(this.direc_cntr > 6) this.direc_cntr = 0
-      this.tmp_status.wind.winddirec = this.direc_cntr
+      this.wdirec_cntr +=1
+      if(this.wdirec_cntr > 6) this.wdirec_cntr = 0
+      this.tmp_status.wind.winddirec = this.wdirec_cntr
     },
     chengePowerImg(){
       this.wpower_cntr +=1
       if(this.wpower_cntr > 3) this.wpower_cntr = 0
       this.tmp_status.wind.windpower = this.wpower_cntr
-    }
+    },
+    sendData(status){
+        var url = '/express/api/ir-option/';
+        var payload = {
+          "target":"aircon",
+          "status":status
+        }
+        axios.post(url, payload, {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Access-Control-Allow-Origin': '*',
+        })
+          .then(res => {
+            console.log(res)
+          }).catch(err => {
+            console.log(err)
+          });
+      }
   },
   created(){
-    this.tmp_status  = _.cloneDeep(this.status)
-    this.direc_cntr  = this.tmp_status.wind.winddirec
+    this.tmp_status  = _.cloneDeep(this.$store.state.home_appliance_status.aircon)
+    this.wdirec_cntr  = this.tmp_status.wind.winddirec
     this.wpower_cntr = this.tmp_status.wind.windpower
   }
 }

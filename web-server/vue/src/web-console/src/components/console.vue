@@ -5,20 +5,21 @@
         <span id="clock_time">{{time}}</span>
     </div>
     <div id='controlpanel'>
-      <light id='light'></light>
+      <room_light id='room_light'></room_light>
       <aircon id='aircon'></aircon>
     </div>
   </div>
 </template>
 
 <script>
-import light from './light.vue'
+import room_light from './room_light.vue'
 import aircon from './aircon.vue'
+
 
 export default {
   name: 'console',
   components: {
-    light,
+    room_light,
     aircon
   },
   data(){
@@ -101,7 +102,7 @@ setInterval(()=>{
   height: 100px;
 }
 
-#light {
+#room_light {
   float:left;
   width: 23%;
 }
