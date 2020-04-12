@@ -14,7 +14,8 @@
 <script>
 import room_light from './room_light.vue'
 import aircon from './aircon.vue'
-
+import { mapState } from "vuex";
+import axios from 'axios'
 
 export default {
   name: 'console',
@@ -45,6 +46,33 @@ export default {
         this.date = y + "/" + m + "/" + d + " (" + w + ")  ";
         this.time = h + ":" + mi + ":" + s;
       }
+  },
+  computed : {
+    ...mapState({
+        status: state => state.home_appliance_status
+    })
+  },
+  mounted(){
+    this.$store.subscribe((mutation) => {
+      if(mutation.type == 'updateHomeApplianceStatus'){
+
+
+        var url = '/express/home-appliance/register/';
+        var payload = this.status
+        console.log('監視中');
+        console.dir(payload);
+        axios.post(url, payload, {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Access-Control-Allow-Origin': '*',
+        })
+          .then(res => {
+            console.log('家電情報登録')
+            console.log(res)
+          }).catch(err => {
+            console.log(err)
+          });
+      }
+    })
   },
   created(){
     this.clock();

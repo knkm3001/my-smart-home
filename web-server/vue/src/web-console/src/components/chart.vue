@@ -24,7 +24,7 @@ export default {
   },
   methods: {
       getApi(fetchnum = 0) {
-        var url = '/express/api/fetch'
+        var url = '/express/roomdata/fetch'
         if(fetchnum) url += '?fetchnum=' + fetchnum;
         axios.get(url, {
         'Content-Type': 'application/json;charset=UTF-8',

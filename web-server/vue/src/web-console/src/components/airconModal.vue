@@ -98,7 +98,7 @@ export default {
       this.tmp_status.wind.windpower = this.wpower_cntr
     },
     sendData(status){
-        var url = '/express/api/ir-option/';
+        var url = '/express/home-appliance/ir-option/';
         var payload = {
           "target":"aircon",
           "status":status

@@ -1,7 +1,7 @@
 <template>
   <div class='flame'>
     <a v-on:click='switchLight()' href='javascript:void(0)'>
-      <img v-if='light_state' alt="" src="/img/room_light_on.png">
+      <img v-if='roomlight_status.power' alt="" src="/img/room_light_on.png">
       <img v-else alt="" src="/img/room_light_off.png">
     </a>
   </div>
@@ -14,21 +14,14 @@ import { mapState } from "vuex";
 
 export default {
   name: 'light',
-  data(){
-      return {
-        light_state:false
-      }
-    },
   methods: {
     switchLight(){
       var status = {'power':!this.roomlight_status.power}
       this.sendData(status)
-
-      
       this.$store.commit('updateHomeApplianceStatus',{target:'room_light', update_status:status})
     },
     sendData(status){
-        var url = '/express/api/ir-option/';
+        var url = '/express/home-appliance/ir-option/';
         var payload = {
           "target":"room_light",
           "status":status

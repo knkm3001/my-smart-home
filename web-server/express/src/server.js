@@ -18,8 +18,10 @@ const allowCrossDomain = function(req, res, next) {
     'Content-Type, Authorization, access_token'
   )
 
-  // intercept OPTIONS method
-  if ('OPTIONS' === req.method) {
+
+
+// intercept OPTIONS method
+if ('OPTIONS' === req.method) {
     res.send(200)
   } else {
     next()
@@ -36,7 +38,8 @@ app.set('view engine', 'ejs');
 
 // mongodb 周り
 const mongoose = require('mongoose');
-const Roomdata = require('./models/Roomdata'); 
+const Roomdata = require('./models/Roomdata');
+const HomeAppliance = require('./models/HomeAppliance'); 
 
 const options = {
 	useUnifiedTopology : true,
@@ -56,43 +59,49 @@ db.once('open', () => console.log('DB connection successful'));
 // raspiへの赤外線信号の処理用
 const request2raspi = require('./models/request2raspi');
 const aircon = require('./models/aircon'); 
-const room_light = require('./models/room_light'); 
+const room_light = require('./models/room_light');
 
-app.get('/', (req, res) => {
-  res.render("index",{});
-});
+
+global.roomdata_updated_flg = true;
 
 
 // post raspiからの部屋のデータ登録
-app.post('/express/api/register/', (req, res) => {
+app.post('/express/roomdata/register/', (req, res) => {
     console.log(req.body);
     var roomdata_instance = new Roomdata(req.body);
     roomdata_instance.save(function (err) {
       if (err) return console.error(err);
     });
     res.send('POST is sended.');
+    roomdata_updated_flg = true;
   });
 
-// get raspiからの部屋のデータデータ取得
-app.get('/express/api/fetch/', (req, res) => {
+
+// get raspiからの部屋のデータ取得
+app.get('/express/roomdata/fetch/', (req, res) => {
   var fetchnum = req.query.fetchnum;
   var num = (typeof parseInt(fetchnum,10) == 'number' && parseInt(fetchnum,10) > 0) ? parseInt(fetchnum,10) : 24
-  Roomdata.find(
-    {}, // フィルター
-    [], // カラム
-    {
-      limit : num,
-      sort : {createdAt:-1}
-    }
-    )
-    .then((data) => {
-      res.send(data);
-    })
+    Roomdata.find(
+        {}, [], // フィルター, カラム
+        {
+          limit : num,
+          sort : {createdAt:-1}
+        }
+      )
+      .then((data) => {
+        res.send(data);
+        roomdata_updated_flg = false;
+      })
+      .catch(()=>{
+        res.status(500);
+      })
+
 });
 
 
+
 // post raspiへの赤外線信号送信
-app.post('/express/api/ir-option/', (req, res) => {
+app.post('/express/home-appliance/ir-option/', (req, res) => {
   console.log(req.body);
   let payload;
   switch(req.body.target){
@@ -108,6 +117,40 @@ app.post('/express/api/ir-option/', (req, res) => {
   }
   res.send('POST is sended.');
 });
+
+
+
+// post 家電情報の登録
+app.post('/express/home-appliance/register/', (req, res) => {
+  console.log(req.body);
+  var home_appliance_instance = new HomeAppliance(req.body);
+  home_appliance_instance.save(function (err) {
+    if (err){
+      res.send(err);
+    }else{
+      res.send('家電情報登録');
+    }
+  })
+
+});
+
+
+
+// get 家電情報の取得
+app.get('/express/home-appliance/fetch/', (req, res) => {
+  console.log(req.body);
+  HomeAppliance.findOne(
+    {}, [], // フィルター, カラム
+    {
+      sort : {createdAt:-1}
+    }
+  )
+  .then((data) => {
+    res.send(data);
+  })
+  res.send('POST is sended.');
+});
+
 
 
 app.listen(PORT, HOST);
