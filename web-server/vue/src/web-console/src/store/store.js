@@ -22,12 +22,14 @@ export default new Vuex.Store({
               settime:""
               }
             },
-        light:{}
-    }
-  },
+        room_light:{
+            power : true
+            }
+          }
+        },
   mutations: {
     updateHomeApplianceStatus(state,payload){
-        state.home_appliance_status.aircon = payload.update_status
+        state.home_appliance_status[payload.target] = payload.update_status
     }
   },
 
