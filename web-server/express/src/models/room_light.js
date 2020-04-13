@@ -1,4 +1,4 @@
-exports.convertToIRData = function(status){
+exports.convertToIRCode = function(status){
     if(status.power){
         var payload = {
             "base_time": 583,

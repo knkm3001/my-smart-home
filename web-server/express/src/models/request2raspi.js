@@ -1,6 +1,6 @@
 const request = require('request');
 
-exports.execIRCodes = function(payload){
+exports.execIRCode = function(payload){
     var options = {
         url: 'http://192.168.0.5:5000/raspi/infrared_code/',
         headers: {
