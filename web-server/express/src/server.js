@@ -63,7 +63,6 @@ const room_light = require('./models/room_light');
 // timer 用
 global.timeoutID = null;
 
-
 // post raspiからの部屋のデータ登録
 app.post('/express/roomdata/register/', (req, res) => {
     console.log(req.body);
@@ -107,36 +106,68 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
       break;
     case 'aircon':
       payload = aircon.convertToIRCode(req.body.status)
-      console.log('aircon:')
-      console.dir(req.body.staus)
       clearTimeout(timeoutID)
 
-      if(req.body.status.timer.settimer && req.body.status.power){
+      if(!(req.body.status.timer.settimer && req.body.status.power)){
+        // timer: off
+        console.log('payload:')
+        console.dir(payload)
+        request2raspi.execIRCode(payload)
+      }else{
         // timer: on
-        var [h,m] = req.body.status.timer.settime.split(':')
-        var wait_msec = (h*3600+m*60)*1000
-        console.log((wait_msec)/1000+'sec後')
-        if(req.body.status.timer.timermode){
-          // power: on
-          timeoutID = setTimeout(()=>{
-            request2raspi.execIRCode(payload);
-          }, wait_msec);
+        let now = new Date();
+        let now_h = now.getHours();
+        let now_m = now.getMinutes();
+        let [set_h,set_m] = req.body.status.timer.settime.split(':')
+        let now_msec = (now_h*3600+now_m*60)*1000
+        let set_msec = (set_h*3600+set_m*60)*1000
+
+        console.log('now: '+now_msec)
+        console.log('set: '+set_msec)
+        
+        var wait_msec = 0;
+        if(set_msec >= now_msec){
+          wait_msec = set_msec - now_msec
         }else{
-          // power: off
-          request2raspi.execIRCode(payload);
-          timeoutID = setTimeout(()=>{
+          // 日をまたぐ場合
+          wait_msec = set_msec + (24*3600*1000 - now_msec)
+        }
+
+        console.log((wait_msec)/1000+' sec後');
+        let power_status
+        (async function(){
+          if(req.body.status.timer.timermode){
+            // power: on
+            console.log('power: on')
+            await new Promise(resolve => setTimeout(resolve, wait_msec))
+            request2raspi.execIRCode(payload)
+            power_status = 1
+          }else{
+            // power: off
+            console.log('power: off')
+            request2raspi.execIRCode(payload);
+            await new Promise(resolve => setTimeout(resolve, wait_msec))
             req.body.status.power = 0
             payload = aircon.convertToIRCode(req.body.status)
             request2raspi.execIRCode(payload);
-          }, wait_msec);
-        }
-        // db に登録
-      }else{
-        console.log('payload:')
-        console.dir(payload)
-        request2raspi.execIRCode(payload);
-        break;
+            power_status = 0
+          }
+          // db更新
+          HomeAppliance.findOne({}, [], {sort : {createdAt:-1}})
+          .then((data) => {
+            console.log('aaa')
+            let updated_status = {}
+            updated_status.home_appliance_status = JSON.parse(JSON.stringify(data.home_appliance_status))
+            updated_status.home_appliance_status.aircon.power = power_status
+            updated_status.home_appliance_status.aircon.timer = { settimer: false, timermode: '', settime: '' }
+            let home_appliance_instance = new HomeAppliance(updated_status);
+            home_appliance_instance.save(function (err) {
+              if (err) console.log(err)
+            })
+          })
+        }());
       }
+      break;
   }
   res.send('POST is sended.');
 });
@@ -145,7 +176,7 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
 // post 家電情報の登録
 app.post('/express/home-appliance/register/', (req, res) => {
   console.log(req.body);
-  var home_appliance_instance = new HomeAppliance(req.body);
+  let home_appliance_instance = new HomeAppliance(req.body);
   home_appliance_instance.save(function (err) {
     if (err){
       res.send(err);
