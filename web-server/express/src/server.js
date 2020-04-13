@@ -121,9 +121,6 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
         let [set_h,set_m] = req.body.status.timer.settime.split(':')
         let now_msec = (now_h*3600+now_m*60)*1000
         let set_msec = (set_h*3600+set_m*60)*1000
-
-        console.log('now: '+now_msec)
-        console.log('set: '+set_msec)
         
         var wait_msec = 0;
         if(set_msec >= now_msec){
@@ -155,7 +152,6 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
           // db更新
           HomeAppliance.findOne({}, [], {sort : {createdAt:-1}})
           .then((data) => {
-            console.log('aaa')
             let updated_status = {}
             updated_status.home_appliance_status = JSON.parse(JSON.stringify(data.home_appliance_status))
             updated_status.home_appliance_status.aircon.power = power_status
