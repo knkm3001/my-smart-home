@@ -10,7 +10,6 @@ exports.convertToIRCode = function(status){
             "signal": [[16, 8], "017600ff", [1, 1]]
             }
     }
-
     return payload;
 
 };

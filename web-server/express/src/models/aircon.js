@@ -113,9 +113,9 @@ const analyzeCD = function(arr){
 
 
 
-exports.convertToIRData = function(status){
+exports.convertToIRCode = function(status){
     var ircode_arr = ['c4d3','6','4','80','00'];          // customercode, customercode(parity), data0 ~ 2
-    ircode_arr.push(status.power ? '04' : '00');            // data3 電源
+    ircode_arr.push(status.power ? '04' : '00');          // data3 電源
     ircode_arr.push(setMode(status.mode));                // data4 運転モード
     ircode_arr.push(setTemp(status.temp - 16));           // data5 設定温度
     ircode_arr.push(setData6(status.mode));               // data6 運転モードで変わる値

@@ -19,7 +19,6 @@ const allowCrossDomain = function(req, res, next) {
   )
 
 
-
 // intercept OPTIONS method
 if ('OPTIONS' === req.method) {
     res.send(200)
@@ -61,8 +60,8 @@ const request2raspi = require('./models/request2raspi');
 const aircon = require('./models/aircon'); 
 const room_light = require('./models/room_light');
 
-
-global.roomdata_updated_flg = true;
+// timer 用
+global.timeoutID = null;
 
 
 // post raspiからの部屋のデータ登録
@@ -73,7 +72,6 @@ app.post('/express/roomdata/register/', (req, res) => {
       if (err) return console.error(err);
     });
     res.send('POST is sended.');
-    roomdata_updated_flg = true;
   });
 
 
@@ -90,14 +88,12 @@ app.get('/express/roomdata/fetch/', (req, res) => {
       )
       .then((data) => {
         res.send(data);
-        roomdata_updated_flg = false;
       })
       .catch(()=>{
         res.status(500);
       })
 
 });
-
 
 
 // post raspiへの赤外線信号送信
@@ -107,17 +103,43 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
   switch(req.body.target){
     case 'room_light':
       payload = room_light.convertToIRCode(req.body.status)
-      request2raspi.execIRCodes(payload);
+      request2raspi.execIRCode(payload);
       break;
     case 'aircon':
       payload = aircon.convertToIRCode(req.body.status)
-      console.dir(payload)
-      request2raspi.execIRCodes(payload);
-      break;
+      console.log('aircon:')
+      console.dir(req.body.staus)
+      clearTimeout(timeoutID)
+
+      if(req.body.status.timer.settimer && req.body.status.power){
+        // timer: on
+        var [h,m] = req.body.status.timer.settime.split(':')
+        var wait_msec = (h*3600+m*60)*1000
+        console.log((wait_msec)/1000+'sec後')
+        if(req.body.status.timer.timermode){
+          // power: on
+          timeoutID = setTimeout(()=>{
+            request2raspi.execIRCode(payload);
+          }, wait_msec);
+        }else{
+          // power: off
+          request2raspi.execIRCode(payload);
+          timeoutID = setTimeout(()=>{
+            req.body.status.power = 0
+            payload = aircon.convertToIRCode(req.body.status)
+            request2raspi.execIRCode(payload);
+          }, wait_msec);
+        }
+        // db に登録
+      }else{
+        console.log('payload:')
+        console.dir(payload)
+        request2raspi.execIRCode(payload);
+        break;
+      }
   }
   res.send('POST is sended.');
 });
-
 
 
 // post 家電情報の登録
@@ -132,7 +154,6 @@ app.post('/express/home-appliance/register/', (req, res) => {
     }
   })
 });
-
 
 
 // get 家電情報の取得
