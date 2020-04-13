@@ -131,14 +131,12 @@ app.post('/express/home-appliance/register/', (req, res) => {
       res.send('家電情報登録');
     }
   })
-
 });
 
 
 
 // get 家電情報の取得
 app.get('/express/home-appliance/fetch/', (req, res) => {
-  console.log(req.body);
   HomeAppliance.findOne(
     {}, [], // フィルター, カラム
     {
@@ -148,7 +146,6 @@ app.get('/express/home-appliance/fetch/', (req, res) => {
   .then((data) => {
     res.send(data);
   })
-  res.send('POST is sended.');
 });
 
 

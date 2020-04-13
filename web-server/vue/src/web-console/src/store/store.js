@@ -7,24 +7,8 @@ export default new Vuex.Store({
   state: {
     roomdata:{},
     home_appliance_status:{
-        aircon:{
-            power : 0,
-            mode : 'cool',
-            temp : 24,
-            wind : 
-              {
-              windpower:0,
-              winddirec:0
-              },
-            timer:{
-              settimer:0,
-              timermode:"",
-              settime:""
-              }
-            },
-        room_light:{
-            power : true
-            }
+        aircon:{},
+        room_light:{}
           }
         },
   mutations: {

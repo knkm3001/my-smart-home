@@ -29,7 +29,7 @@ export default {
     }
   },
   methods: {
-    clock(){
+    showClock(){
         var weeks = new Array("Sun","Mon","Thu","Wed","Thr","Fri","Sat");
         var now = new Date();
         var y = now.getFullYear();
@@ -45,38 +45,51 @@ export default {
         if (s < 10) s = "0" + s;
         this.date = y + "/" + m + "/" + d + " (" + w + ")  ";
         this.time = h + ":" + mi + ":" + s;
-      }
+      },
+    registerAppriancesData(){
+      this.$store.subscribe((mutation) => {
+        if(mutation.type == 'updateHomeApplianceStatus'){
+          let url = '/express/home-appliance/register/';
+          let payload = this.status
+          console.log('payload')
+          console.dir(payload)
+          axios.post(url, payload, {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+          })
+            .then(res => {
+              console.log('家電情報登録')
+              console.log(res)
+            }).catch(err => {
+              console.log(err)
+            });
+          }
+      })
+    },
+    fetchAppriancesData(){
+          let url = '/express/home-appliance/fetch/';
+          axios.get(url, {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+          })
+            .then(res => {
+              console.log('家電情報取得')
+              this.status.home_appliance_status = res.data.home_appliance_status
+          })
+    }
   },
   computed : {
     ...mapState({
-        status: state => state.home_appliance_status
+        status: state => state
     })
+  },
+  async created(){
+    this.showClock();
+    await this.fetchAppriancesData();
   },
   mounted(){
-    this.$store.subscribe((mutation) => {
-      if(mutation.type == 'updateHomeApplianceStatus'){
-
-
-        var url = '/express/home-appliance/register/';
-        var payload = this.status
-        console.log('監視中');
-        console.dir(payload);
-        axios.post(url, payload, {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Access-Control-Allow-Origin': '*',
-        })
-          .then(res => {
-            console.log('家電情報登録')
-            console.log(res)
-          }).catch(err => {
-            console.log(err)
-          });
-      }
-    })
+    this.registerAppriancesData();
   },
-  created(){
-    this.clock();
-  }
 }
 
 // TODO ここをいい感じに上のメソッドとまとめる。
