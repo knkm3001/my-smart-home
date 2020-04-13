@@ -83,9 +83,9 @@ export default {
         status: state => state
     })
   },
-  async created(){
+  created(){
     this.showClock();
-    await this.fetchAppriancesData();
+    this.fetchAppriancesData();
   },
   mounted(){
     this.registerAppriancesData();

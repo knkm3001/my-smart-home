@@ -45,9 +45,9 @@ export default {
           },{
             id:'y-axis-pres', //気圧
             ticks: {
-              stepSize: 2,
-              max: 1018,
-              min: 1000,
+              stepSize: 4,
+              max: 1020,
+              min: 992,
               userCallback: (tick)=> {
                   return tick.toString() + 'hpa';
                 }
