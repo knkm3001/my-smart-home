@@ -47,7 +47,7 @@ export default {
             ticks: {
               stepSize: 4,
               max: 1020,
-              min: 992,
+              min: 980,
               userCallback: (tick)=> {
                   return tick.toString() + 'hpa';
                 }
