@@ -106,11 +106,11 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
   let payload;
   switch(req.body.target){
     case 'room_light':
-      payload = room_light.convertToIRData(req.body.status)
+      payload = room_light.convertToIRCode(req.body.status)
       request2raspi.execIRCodes(payload);
       break;
     case 'aircon':
-      payload = aircon.convertToIRData(req.body.status)
+      payload = aircon.convertToIRCode(req.body.status)
       console.dir(payload)
       request2raspi.execIRCodes(payload);
       break;
