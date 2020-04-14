@@ -108,13 +108,12 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
       payload = aircon.convertToIRCode(req.body.status)
       clearTimeout(timeoutID)
 
-      if(!(req.body.status.timer.settimer && req.body.status.power)){
-        // timer: off
-        console.log('payload:')
+      if(!(req.body.status.timer.settimer)){
+        // timer使わない
         console.dir(payload)
         request2raspi.execIRCode(payload)
       }else{
-        // timer: on
+        // timer使う
         let now = new Date();
         let now_h = now.getHours();
         let now_m = now.getMinutes();

@@ -3,10 +3,10 @@
     <airconModal v-if='modal' v-on:close-modal='closeModal' :imgs='imgs'></airconModal>
     <a href='javascript:void(0)' v-on:click='openModal'>
       <div class='aircon'>
-        <img v-if='aircon_status.power' alt="aircon logo" src="/img/aircon_on.png">
-        <img v-else alt="aircon logo" src="/img/aircon_off.png">
+        <img v-if='aircon_status.power==0' alt="aircon logo" src="/img/aircon_off.png">
+        <img v-else alt="aircon logo" src="/img/aircon_on.png">
         <div class='aircon-status'>
-          <div v-if='aircon_status.power || (aircon_status.timer.timermode == 1 && aircon_status.timer.settime)'>
+          <div v-if='aircon_status.power || (aircon_status.timer.settimer && aircon_status.timer.timermode)'>
             <div class='show-status'>
               <div><img :src='this.imgs.mode_types[aircon_status.mode]'></div>
               <div><p>{{aircon_status.temp}}℃</p></div>
@@ -14,7 +14,7 @@
               <div><img :src='this.imgs.wpower_imgs[aircon_status.wind.windpower]'></div>
             </div>
             <div class='show-timer' v-show='aircon_status.timer.settimer && aircon_status.timer.settime'>
-                <p>{{showTimerStatus}}</p>
+                <p>power: <br>{{showTimerStatus}}</p>
                 <p>time : <br>{{aircon_status.timer.settime}}</p>
             </div>
           </div>

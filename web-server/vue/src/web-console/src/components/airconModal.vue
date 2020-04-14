@@ -49,8 +49,8 @@
       </div>
 
       <div id='send-bottun'>
-        <a href="javascript:void(0)" class="btn-square stop" v-on:click="updataStatus(0)">stop</a>
-        <a href="javascript:void(0)" class="btn-square send" v-on:click="updataStatus(1)">send</a>
+        <a href="javascript:void(0)" class="btn-square stop" v-on:click="updateStatus(0)">stop</a>
+        <a href="javascript:void(0)" class="btn-square send" v-on:click="updateStatus(1)">send</a>
       </div>
 
 
@@ -82,10 +82,14 @@ export default {
     stopEvent(){
       event.stopPropagation()
     },
-    updataStatus(option){
+    updateStatus(option){
+      if(!(option)){
+        this.tmp_status.timer = { settimer: false, timermode: '', settime: '' }
+      }
       this.tmp_status.power = option  // 0:off, 1:on
-      this.$store.commit('updateHomeApplianceStatus',{target:'aircon', update_status:this.tmp_status})
       this.sendData(this.tmp_status)
+      this.$store.commit('updateHomeApplianceStatus',{target:'aircon', update_status:this.tmp_status})
+      this.tmp_status  = _.cloneDeep(this.$store.state.home_appliance_status.aircon)
     },
     chengeDirecImg(){
       this.wdirec_cntr +=1
@@ -112,12 +116,19 @@ export default {
           }).catch(err => {
             console.log(err)
           });
+      },
+      getNowTime(){
+        let now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes();
+        this.tmp_status.timer.settime = h+':'+m
       }
   },
   created(){
     this.tmp_status  = _.cloneDeep(this.$store.state.home_appliance_status.aircon)
-    this.wdirec_cntr  = this.tmp_status.wind.winddirec
+    this.wdirec_cntr = this.tmp_status.wind.winddirec
     this.wpower_cntr = this.tmp_status.wind.windpower
+    this.getNowTime()
   }
 }
 
