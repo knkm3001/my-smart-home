@@ -8,5 +8,4 @@ RUN apk update && \
 RUN chmod 777 ./*
 
 RUN cd web-console
-RUN npm run serve
 
