@@ -74,7 +74,10 @@ export default {
           })
             .then(res => {
               console.log('家電情報取得')
-              this.status.home_appliance_status = res.data.home_appliance_status
+              console.log(JSON.stringify(res.data.home_appliance_status));
+              if(res.data.home_appliance_status != undefined){ // store更新
+                this.status.home_appliance_status = res.data.home_appliance_status
+              }
           })
     }
   },
