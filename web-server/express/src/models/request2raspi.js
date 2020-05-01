@@ -2,7 +2,7 @@ const request = require('request');
 
 exports.execIRCode = function(payload){
     var options = {
-        url: 'http://192.168.0.5:5000/raspi/infrared_code/',
+        url: 'http://192.168.0.48/esp32/flashIR',
         headers: {
             "Content-type": "application/json",
           },

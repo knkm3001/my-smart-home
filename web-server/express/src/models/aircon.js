@@ -124,13 +124,13 @@ exports.convertToIRCode = function(status){
     console.log(ircode_arr)
     ircode_arr.push(analyzeCD(ircode_arr));
 
-    var ircode = '';
+    var ircode = '0x';
     for(v of ircode_arr){
         ircode += v;
     }
     console.log(ircode)
 
 
-    return {"base_time": 435, "signal": [[8, 4], ircode, [1, 30], [8, 4], ircode, [1, 30]]};
+    return {"base_time": 435, "signal": ["8", "4", ircode, "1", "30", "8", "4", ircode, "1","1"]};
 
 };
