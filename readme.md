@@ -1,7 +1,7 @@
 # ESP32を使用した自室のスマートホーム化 
 ESP32を使用して、自室の気温・湿度・気圧などのデータの取得、また家電操作を行って自室のスマートホーム化を目指す。機能を追加し次第、更新していく予定。
   
-## できていること
+## 機能
 - ESP32を利用したスマートリモコンの作成
 - ESP32から部屋の温度・湿度・気圧を取得
 - webコンソール画面
@@ -11,18 +11,10 @@ ESP32を使用して、自室の気温・湿度・気圧などのデータの取
   
 ## 回路
 ![circuit](https://user-images.githubusercontent.com/54818379/80910339-ca19ea80-8d69-11ea-8d50-7717a9a21d1a.jpg)
-  
-## TODO
-- 時刻の下にいまの気温とかそういうの記載する。
-- 天気予報機能を実装
-- ESP32から部屋の照度、二酸化炭素濃度など値を取得
-- Slack とか Alexa みたいなのでも操作する
-- ESP32のmain.cppのファイル分割
-- ESP32のHTTPエラー処理
-- ESP32で赤外線コードの読み取りとリテラルへのコンバートAPIの実装
 
-## 機能
-ESP32とLAN内のサーバ(複数のコンテナが起動)を用いて実装した
+
+## システム構成
+ESP32とLAN内のサーバ(複数のコンテナが起動)を用いて構成
 - ESP32
   - 自室のデータの取得及びサーバへのポスト
   - POSTされたjsonフォーマットに従って赤外線LEDを点滅させることによる自室の家電の操作
@@ -34,13 +26,20 @@ ESP32とLAN内のサーバ(複数のコンテナが起動)を用いて実装し�
   - DBコンテナ(mongoDB)
     - センサより得られた室内のデータ、及び家電のステータスを保存
 
-
+## TODO
+- 時刻の下にいまの気温とかそういうの記載する。
+- 天気予報機能を実装
+- ESP32から部屋の照度、二酸化炭素濃度など値を取得
+- Slack とか Alexa みたいなのでも操作する
+- ESP32のmain.cppのファイル分割
+- ESP32のHTTPエラー処理
+- ESP32で赤外線コードの読み取りとリテラルへのコンバートAPIの実装
 
 ## 使用した道具や部品
 
 |  部品名 |  個数  |
 | ---- | ---- |
-|  raspi3 modelB  |1台|
+| ESP32 DevKit ESP32-WROOM  |1台|
 |  赤外線リモコン受信モジュール<br>OSRB38C9AA|1つ|
 |MOSFET 2N7000|1つ|
 |MOSFET IRFU9024NPBF|1つ|
@@ -60,7 +59,8 @@ ESP32とLAN内のサーバ(複数のコンテナが起動)を用いて実装し�
 [うたかたサバイバー Raspberry Piでエアコンの赤外線リモコンを解析する](https://paltee.net/archives/247)  
 [電脳伝説 赤外線LEDドライブ回路の決定版](https://vintagechips.wordpress.com/2013/10/05%E8%B5%A4%E5%A4%96%E7%B7%9Aled%E3%83%89%E3%83%A9%E3%82%A4%E3%83%96%E5%9B%9E%E8%B7%AF%E3%81%AE%E6%B1%BA%E5%AE%9A%E7%89%88/)  
 [赤外線リモコンの通信フォーマット](http://elm-chan.org/docs/ir_format.html)  
-[irrp.py](http://abyz.me.uk/rpi/pigpio/examples.html#Python_irrp_py) 
+[irrp.py](http://abyz.me.uk/rpi/pigpio/examples.html#Python_irrp_py)  
+[ESP32 Web Server with BME280](https://randomnerdtutorials.com/esp32-web-server-with-bme280-mini-weather-station/)
 
 
 
