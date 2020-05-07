@@ -108,7 +108,8 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
     case 'aircon':
       payload = aircon.convertToIRCode(req.body.status)
       let timerID = crypto.randomBytes(16).toString('base64').substring(0, 16)
-      console.log("timerID: "+timerID)
+      clearTimeout(timeoutID);
+      timeoutID = null
 
       if(!(req.body.status.timer.settimer)){
         // timer使わない
@@ -134,24 +135,38 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
         }
 
         console.log((wait_msec)/1000+' sec後');
-        let power_status
         (async function(){
           if(req.body.status.timer.timermode){
             // power: on
             console.log('power: on')
-            await new Promise(resolve => setTimeout(resolve, wait_msec))
-            request2esp32.sendIRCode(payload)
-            power_status = 1
+            await new Promise(function(resolve, reject) {
+              timeoutID = setTimeout(function() {
+                resolve('timeout done');
+              }, wait_msec);
+            });
+            power_status = true
           }else{
             // power: off
             console.log('power: off')
             request2esp32.sendIRCode(payload);
-            await new Promise(resolve => setTimeout(resolve, wait_msec))
-            req.body.status.power = 0
+            await new Promise(function(resolve, reject) {
+              timeoutID = setTimeout(function() {
+                resolve('timeout done');
+              }, wait_msec);
+            });
+            req.body.status.power = false
             payload = aircon.convertToIRCode(req.body.status)
-            request2esp32.sendIRCode(payload);
-            power_status = 0
+            power_status = false
           }
+
+          if(timeoutID){
+            console.log("timeout後の実行")
+            request2esp32.sendIRCode(payload);
+          }else{
+            console.log("timeout後の実行はしませんでした")
+            power_status != power_status
+          }
+
           // db更新
           HomeAppliance.findOne({}, [], {sort : {createdAt:-1}})
           .then((data) => {
