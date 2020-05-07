@@ -102,7 +102,7 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
   switch(req.body.target){
     case 'room_light':
       payload = room_light.convertToIRCode(req.body.status)
-      request2esp32.execIRCode(payload);
+      request2esp32.sendIRCode(payload);
       break;
     case 'aircon':
       payload = aircon.convertToIRCode(req.body.status)
@@ -111,7 +111,7 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
       if(!(req.body.status.timer.settimer)){
         // timer使わない
         console.dir(payload)
-        request2esp32.execIRCode(payload)
+        request2esp32.sendIRCode(payload)
       }else{
         // timer使う
         let now = new Date();
@@ -136,16 +136,16 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
             // power: on
             console.log('power: on')
             await new Promise(resolve => setTimeout(resolve, wait_msec))
-            request2esp32.execIRCode(payload)
+            request2esp32.sendIRCode(payload)
             power_status = 1
           }else{
             // power: off
             console.log('power: off')
-            request2esp32.execIRCode(payload);
+            request2esp32.sendIRCode(payload);
             await new Promise(resolve => setTimeout(resolve, wait_msec))
             req.body.status.power = 0
             payload = aircon.convertToIRCode(req.body.status)
-            request2esp32.execIRCode(payload);
+            request2esp32.sendIRCode(payload);
             power_status = 0
           }
           // db更新
