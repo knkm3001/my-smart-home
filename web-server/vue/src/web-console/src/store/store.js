@@ -8,7 +8,7 @@ export default new Vuex.Store({
     roomdata:{},
     home_appliance_status:{
         aircon:{
-          power : 0,
+          power : false,
           mode : "cool",
           temp : 25,
           wind : 
@@ -23,7 +23,7 @@ export default new Vuex.Store({
             }
         },
         room_light:{
-          "power":0
+          power:false
         }
           }
         },
