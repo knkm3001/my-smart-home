@@ -16,3 +16,6 @@ raspi/init.sh
 /web-server/mongo/db/
 web-server/express/src/node_modules/
 web-server/vue/src/node_modules/
+ESP32/lib/README
+ESP32/include/README
+ESP32/test/README
