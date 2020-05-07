@@ -1,10 +1,12 @@
+// 家電情報データ用のmongooseスキーマ
+
 const mongoose = require('mongoose');
 
 const HomeApplianceSchema = mongoose.Schema(
   {
   home_appliance_status:{
       aircon:{
-          power : Number,
+          power : Boolean,
           mode : String,
           temp : Number,
           wind : 

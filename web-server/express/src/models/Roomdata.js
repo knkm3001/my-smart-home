@@ -1,3 +1,5 @@
+// 部屋のデータ用のmongooseスキーマ
+
 const mongoose = require('mongoose');
 
 const RoomdataSchema = mongoose.Schema(
