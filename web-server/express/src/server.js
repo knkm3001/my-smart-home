@@ -1,14 +1,16 @@
-'use strict';
+'use strict'
 
 // Constants
-const PORT = 3000;
-const HOST = '0.0.0.0';
+const PORT = 3000
+const HOST = '0.0.0.0'
 
 // express 周り
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require('express')
+const bodyParser = require('body-parser')
 
-const app = express();
+const crypto = require('crypto')
+
+const app = express()
 
 const allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -31,14 +33,14 @@ app.use(allowCrossDomain)
 
 app.use(bodyParser.urlencoded({
     extended: true
-}));
-app.use(bodyParser.json());
-app.set('view engine', 'ejs');
+}))
+app.use(bodyParser.json())
+app.set('view engine', 'ejs')
 
 // mongodb 周り
-const mongoose = require('mongoose');
-const Roomdata = require('./models/Roomdata');
-const HomeAppliance = require('./models/HomeAppliance'); 
+const mongoose = require('mongoose')
+const Roomdata = require('./models/Roomdata')
+const HomeAppliance = require('./models/HomeAppliance')
 
 const options = {
 	useUnifiedTopology : true,
@@ -48,65 +50,65 @@ const options = {
 const url = 'mongodb://user:password@mongo:27017/my-smart-room'
 
 
-mongoose.connect(url, options);
-mongoose.Promise = global.Promise;
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => console.log('DB connection successful'));
+mongoose.connect(url, options)
+mongoose.Promise = global.Promise
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+db.once('open', () => console.log('DB connection successful'))
 
 
 // raspiへの赤外線信号の処理用
-const request2esp32 = require('./models/request2esp32');
-const aircon = require('./models/aircon'); 
-const room_light = require('./models/room_light');
+const request2esp32 = require('./models/request2esp32')
+const aircon = require('./models/aircon')
+const room_light = require('./models/room_light')
 
 // timer 用
-global.timeoutID = null;
+global.timeoutID = null
 
 // post raspiからの部屋のデータ登録
 app.post('/express/roomdata/register/', (req, res) => {
-    console.log(req.body);
-    var roomdata_instance = new Roomdata(req.body);
-    roomdata_instance.save(function (err) {
-      if (err) return console.error(err);
-    });
-    res.send('POST is sended.');
-  });
+  console.log(req.body)
+  let roomdata_instance = new Roomdata(req.body)
+  roomdata_instance.save(function (err) {
+    if (err) return console.error(err)
+  })
+  res.send('POST is sended.')
+})
 
 
 // get raspiからの部屋のデータ取得
 app.get('/express/roomdata/fetch/', (req, res) => {
-  var fetchnum = req.query.fetchnum;
-  var num = (typeof parseInt(fetchnum,10) == 'number' && parseInt(fetchnum,10) > 0) ? parseInt(fetchnum,10) : 24
-    Roomdata.find(
-        {}, [], // フィルター, カラム
-        {
-          limit : num,
-          sort : {createdAt:-1}
-        }
-      )
-      .then((data) => {
-        res.send(data);
-      })
-      .catch(()=>{
-        res.status(500);
-      })
+  let fetchnum = req.query.fetchnum
+  let num = (typeof parseInt(fetchnum,10) == 'number' && parseInt(fetchnum,10) > 0) ? parseInt(fetchnum,10) : 24
+  Roomdata.find(
+      {}, [], // フィルター, カラム
+      {
+        limit : num,
+        sort : {createdAt:-1}
+      }
+    )
+    .then((data) => {
+      res.send(data)
+    })
+    .catch(()=>{
+      res.status(500)
+    })
+})
 
-});
 
-
-// post raspiへの赤外線信号送信
+// post esp32への赤外線信号送信
 app.post('/express/home-appliance/ir-option/', (req, res) => {
-  console.log(req.body);
-  let payload;
+  console.dir(req.body)
+  let payload
   switch(req.body.target){
     case 'room_light':
       payload = room_light.convertToIRCode(req.body.status)
-      request2esp32.sendIRCode(payload);
-      break;
+      request2esp32.sendIRCode(payload)
+      break
     case 'aircon':
       payload = aircon.convertToIRCode(req.body.status)
-      clearTimeout(timeoutID)
+      let timerID = crypto.randomBytes(16).toString('base64').substring(0, 16)
+      console.log("timerID: "+timerID)
 
       if(!(req.body.status.timer.settimer)){
         // timer使わない
@@ -114,14 +116,16 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
         request2esp32.sendIRCode(payload)
       }else{
         // timer使う
-        let now = new Date();
-        let now_h = now.getHours();
-        let now_m = now.getMinutes();
+        let power_status
+        let buff_timerID = timerID
+        let now = new Date()
+        let now_h = now.getHours()
+        let now_m = now.getMinutes()
         let [set_h,set_m] = req.body.status.timer.settime.split(':')
         let now_msec = (now_h*3600+now_m*60)*1000
         let set_msec = (set_h*3600+set_m*60)*1000
-        
-        var wait_msec = 0;
+        let wait_msec = 0
+
         if(set_msec >= now_msec){
           wait_msec = set_msec - now_msec
         }else{
@@ -164,22 +168,24 @@ app.post('/express/home-appliance/ir-option/', (req, res) => {
       }
       break;
   }
-  res.send('POST is sended.');
-});
+  res.send('POST is sended.')
+})
+
 
 
 // post 家電情報の登録
 app.post('/express/home-appliance/register/', (req, res) => {
-  console.log(req.body);
-  let home_appliance_instance = new HomeAppliance(req.body);
+  console.log("req body: ")
+  console.log(req.body)
+  let home_appliance_instance = new HomeAppliance(req.body)
   home_appliance_instance.save(function (err) {
     if (err){
-      res.send(err);
+      res.send(err)
     }else{
-      res.send('家電情報登録');
+      res.send('家電情報登録')
     }
   })
-});
+})
 
 
 // get 家電情報の取得
@@ -191,11 +197,12 @@ app.get('/express/home-appliance/fetch/', (req, res) => {
     }
   )
   .then((data) => {
-    res.send(data);
+    res.send(data)
   })
-});
+})
 
 
 
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+app.listen(PORT, HOST)
+console.log(`Running on http://${HOST}:${PORT}`)
+
