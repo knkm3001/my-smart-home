@@ -12,6 +12,17 @@ ESP32を使用して、自室の気温・湿度・気圧などのデータの取
 ## 回路
 ![circuit](https://user-images.githubusercontent.com/54818379/80910339-ca19ea80-8d69-11ea-8d50-7717a9a21d1a.jpg)
 
+## コマンド
+- vue コンテナ
+`cd my-smart-home/web-server`  
+`docker-compose exec vue sh`  
+`cd web-console/;npm run serve`
+- express コンテナ
+### 
+`docker-compose exec express bash`  
+`node server.js`  
+
+
 
 ## システム構成
 ESP32とLAN内のサーバ(複数のコンテナが起動)を用いて構成
