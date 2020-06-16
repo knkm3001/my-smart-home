@@ -1,6 +1,9 @@
 # ESP32を使用した自室のスマートホーム化 
 ESP32を使用して、自室の気温・湿度・気圧などのデータの取得、また家電操作を行って自室のスマートホーム化を目指す。機能を追加し次第、更新していく予定。
-  
+
+![demo](https://user-images.githubusercontent.com/54818379/84763772-b075ef00-b007-11ea-8802-442dc2d2a733.gif)
+
+
 ## 機能
 - ESP32を利用したスマートリモコンの作成
 - ESP32から部屋の温度・湿度・気圧を取得
@@ -13,11 +16,11 @@ ESP32を使用して、自室の気温・湿度・気圧などのデータの取
 ![circuit](https://user-images.githubusercontent.com/54818379/80910339-ca19ea80-8d69-11ea-8d50-7717a9a21d1a.jpg)
 
 ## コマンド
-- vue コンテナ
+- vue コンテナ  
 `cd my-smart-home/web-server`  
 `docker-compose exec vue sh`  
 `cd web-console/;npm run serve`
-- express コンテナ
+- express コンテナ  
 ### 
 `docker-compose exec express bash`  
 `node server.js`  
