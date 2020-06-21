@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class='img'>
+    <div class='vue-logo'>
       <img alt="Vue logo" src="./assets/logo.png" height=100 width=100>
     </div>
     <div class='flame'>
@@ -40,7 +40,29 @@ export default {
   margin-top: 20px;
 }
 
-.flame > div{
+
+@media screen and (max-width:800px){
+  /*画面幅が800pxまでの時*/
+  .vue-logo{
+    display:none
+  }
+  .flame > div{
+  display: inline-block;
+  vertical-align: top;
+  width : 90%;
+  height: 400px;
+  margin: 10px;
+  padding: 10px;
+  background: #1b1a1a;
+  color: #000000;
+  border: solid 1px #979397;
+  margin-top: 60px;
+  }
+}
+
+@media screen and (min-width:1000px){
+  /*画面幅が1000px以上の時*/
+  .flame > div{
   display: inline-block;
   vertical-align: top;
   width : 44%;
@@ -51,5 +73,8 @@ export default {
   color: #000000;
   border: solid 1px #979397;
   margin-top: 60px;
+  }
 }
+
+
 </style>

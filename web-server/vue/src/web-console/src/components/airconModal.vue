@@ -33,8 +33,10 @@
 
       <div id='timer'>
         <div id='is-use-timer' class="cp_ipcheck">
-          <input type="checkbox" id="c_ch1" v-model='tmp_status.timer.settimer'>
-          <label for="c_ch1">Timer:</label>
+          <span class="cp_ipcheck">
+            <input type="checkbox" id="c_ch1" v-model='tmp_status.timer.settimer'>
+            <label for="c_ch1">Timer: </label>
+          </span>
         </div>
         <div class="timer-zone" v-show='tmp_status.timer.settimer'>
           <span class="cp_ipcheck cp_ipcheck2">
@@ -155,8 +157,8 @@ export default {
   border-color: #ffffff;
   border-width: 2px;
   z-index:2;
-  min-width:40%;
-  height:50%;
+  min-width:600px;
+  height:350px;
   padding: 1em;
   background: rgba(99, 97, 97, 0.8);
 }
@@ -217,17 +219,15 @@ input[type=range]::-webkit-slider-thumb{
   display:none
 }
 
+.mode-button img{
+  height: 4.5rem;
+  margin: 2px 5px
+}
+
 input[type="radio"]:checked + img{
   background: rgba(204, 203, 203, 0.8);
   border-radius: 5px;
 }
-
-.mode-button img{
-  max-width: 60%;
-  max-height: 100px;
-  margin : auto 10px;
-}
-
 /** wind botton */
 #wind{
   height: 20%;
@@ -298,10 +298,7 @@ input[type="radio"]:checked + img{
 /** Timer */
 #timer{
   height: 20%;
-  width: 40%;
   margin-top: 16px;
-  margin-right: 30%;
-  margin-left: 30%;
 }
 
 #timer label{
@@ -335,7 +332,7 @@ input[type="radio"]:checked + img{
 }
 
 .cp_ipcheck {
-  width: 10%;
+  width: 35%;
 }
 .cp_ipcheck input {
   display: none;

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <link rel="apple-touch-icon" href="<%= BASE_URL %>/img/logo.png">
     <title><%= htmlWebpackPlugin.options.title %></title>
@@ -20,7 +20,11 @@
   <style type="text/css">
   <!--
     body {background: #000000;}
-    html, body{overflow: hidden;}
+    
+    @media screen and (min-width:800px){
+      /*画面幅が1600px以上の時*/
+      html, body{overflow: hidden;}
+    }
   --> 
   </style>
 </html>
