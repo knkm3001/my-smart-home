@@ -332,7 +332,7 @@ input[type="radio"]:checked + img{
 }
 
 .cp_ipcheck {
-  width: 35%;
+  width: 200px;
 }
 .cp_ipcheck input {
   display: none;
