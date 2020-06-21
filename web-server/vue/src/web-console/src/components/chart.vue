@@ -1,13 +1,13 @@
 <template>
   <div class="chart">
-    <draw_chart v-bind:fetch_data='fetch_data'></draw_chart>
+    <drawChart v-bind:fetch_data='fetch_data'></drawChart>
   </div>
 </template>
 
 
 <script>
 import axios from 'axios'
-import draw_chart from './draw_chart';
+import drawChart from './drawChart';
 
 export default {
   name: 'chart',
@@ -15,7 +15,7 @@ export default {
     msg: String
   },
   components: {
-    draw_chart,
+    drawChart,
   },
   data(){
     return {

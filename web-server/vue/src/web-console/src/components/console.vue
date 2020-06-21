@@ -5,14 +5,14 @@
         <span id="clock_time">{{time}}</span>
     </div>
     <div id='controlpanel'>
-      <room_light id='room_light'></room_light>
+      <roomLight id='room_light'></roomLight>
       <aircon id='aircon'></aircon>
     </div>
   </div>
 </template>
 
 <script>
-import room_light from './room_light.vue'
+import roomLight from './roomLight.vue'
 import aircon from './aircon.vue'
 import { mapState } from "vuex";
 import axios from 'axios'
@@ -20,7 +20,7 @@ import axios from 'axios'
 export default {
   name: 'console',
   components: {
-    room_light,
+    roomLight,
     aircon
   },
   data(){
