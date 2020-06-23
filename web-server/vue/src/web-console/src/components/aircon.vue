@@ -14,8 +14,8 @@
               <div><img :src='this.imgs.wpower_imgs[aircon_status.wind.windpower]'></div>
             </div>
             <div class='show-timer' v-show='aircon_status.timer.settimer && aircon_status.timer.settime'>
-                <p>power: <br>{{showTimerStatus}}</p>
-                <p>time : <br>{{aircon_status.timer.settime}}</p>
+              <div><p>power: <br>{{showTimerStatus}}</p></div>
+              <div><p>time: <br>{{aircon_status.timer.settime}}</p></div>
             </div>
           </div>
         </div>
@@ -89,15 +89,93 @@ export default {
 <style scoped>
 
 .aircon > img {
-    max-width: 45%;
-    max-height: 100px;
-    float : left;
-    margin : auto 10px;
+  padding: 2px;
 }
 
+.aircon > img {
+  max-width: 40%;
+  max-height: 100px;
+  float : left;
+  margin : auto;
+}
+
+/** aircon  */
+
+.aircon-status{
+  width:55%;
+  height: 100px;
+  display: inline-block;
+  background-color: #696767;
+  border-radius: 2px;
+  color:aliceblue;
+}
+
+.show-status, 
+.show-timer{
+  float: left;
+  height: 100px;
+}
+
+.show-status{
+  width: 60%;
+}
+
+.show-timer{
+  width: 40%;
+}
+
+.show-status div,
+.show-timer div{
+  height: 50%;
+  position: relative;
+}
+
+.show-status div{
+  float: left;
+  width: 50%;
+}
+
+.show-status img{
+  padding: 4%;
+  max-height: 80%;
+  max-width: 80%;
+}
+
+.show-status p,
+.show-timer p{
+  text-align:center;
+  color: #FFF;
+  margin:0 auto;
+  position: absolute;
+  top: 50%;
+  left:50%;
+  -webkit-transform : translate(-50%,-50%);
+  transform : translate(-50%,-50%);
+}
+
+@media screen and (max-width:800px){
+  /*????800px????*/
+  .show-status p,
+  .show-timer p{
+    font-size: 0.8em;
+  }
+}
+
+@media screen and (min-width:1000px){
+  /*????1000px????*/
+  .show-status p,
+  .show-timer p{
+    font-size: 1.2em;
+  }
+}
+
+
+
+
+
+/** modal */
 #overlay{
   z-index:1;
-
   position:fixed;
   top:0;
   left:0;
@@ -106,61 +184,11 @@ export default {
   background-color:rgba(0,0,0,0.5);
   margin:0;
   border:hidden;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
-/** aircon  */
-
-.aircon-status{
-  width: 45%;
-  height: 100px;
-  display: inline-block;
-  background-color: #696767;
-  border-radius: 2px;
-  color:aliceblue;
-}
-
-.show-status{
-  float: left;
-  width: 70%;
-  height: 100px;
-}
-
-.show-status div{
-  width: 48%;
-  height: 50%;
-  float: left;
-  text-align:center;
-}
-
-.show-status p{
-  font-size: 1.2em;
-  line-height: 18px;
-  text-align:center;
-  color: #FFF;
-}
-
-.show-status img{
-  padding: 4%;
-  max-height: 42px;
-}
-
-.show-timer{
-  float: right;
-  width: 30%;
-  height: 100px;
-}
-
-.show-timer span{
-  text-align:center;
-  margin:0 auto;
-}
-
-/** modal */
 #content{
   z-index:2;
   width:50%;
