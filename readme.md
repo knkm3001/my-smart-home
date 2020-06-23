@@ -1,5 +1,6 @@
 # ESP32を使用した自室のスマートホーム化 
-ESP32を使用して、自室の気温・湿度・気圧などのデータの取得、また家電操作を行って自室のスマートホーム化を目指す。機能を追加し次第、更新していく予定。
+ESP32を使用して、自室の気温・湿度・気圧などのデータの取得、また家電操作を行って自室のスマートホーム化を目指す。  
+機能を追加し次第、更新していく予定。
 
 ![demo](https://user-images.githubusercontent.com/54818379/84763772-b075ef00-b007-11ea-8802-442dc2d2a733.gif)
 
@@ -12,14 +13,21 @@ ESP32を使用して、自室の気温・湿度・気圧などのデータの取
   - エアコンの操作
   - 部屋の温度・湿度・気圧のグラフ表示
 
-## コマンド
-- vue コンテナ  
-`cd my-smart-home/web-server`  
-`docker-compose exec vue sh`  
-`cd web-console/;npm run serve`
-- express コンテナ  
-`docker-compose exec express bash`  
-`node server.js`  
+## デプロイ
+- サーバ  
+  `docker-compose up -d`
+  - vue コンテナ  
+  `cd my-smart-home/web-server`  
+  `docker-compose exec vue sh`  
+  `cd web-console/;npm run serve`
+  - express コンテナ  
+  `docker-compose exec express bash`  
+  `node server.js`  
+- ESP32
+  - pcに接続し、ソースコードにwifiのssidとpwを記述してビルド
+  - 起動が確認できたら、pcから外してコンセントから給電させて動かす
+
+
 
 ## システム構成
 ESP32とLAN内のサーバ(複数のコンテナが起動)を用いて構成
