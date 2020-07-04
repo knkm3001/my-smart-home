@@ -1,50 +1,52 @@
 version: '3'
 services:
     vue:
-      build:
-         context: vue
-      environment:
-          TZ: Asia/Tokyo
-      tty: true
-      volumes:
-          - ./vue/src/:/usr/src/app
-      ports:
-           - 18082:8080
-
-    express:
         build:
-           context: express
+            context: vue
         environment:
             TZ: Asia/Tokyo
+        restart: always
+        tty: true
+        volumes:
+            - ./vue/src/:/usr/src/app
+        ports:
+            - 18082:8080
+    express:
+        build:
+            context: express
+        environment:
+            TZ: Asia/Tokyo
+        restart: always
         tty: true
         volumes:
             - ./express/src/:/usr/src/app
         ports:
-             - 13000:3000
-
+            - 13000:3000
+        depends_on:
+            - mongo
     mongo:
         image: mongo
         restart: always
         environment:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: root
-          MONGO_INITDB_DATABASE: my-smart-room
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+            MONGO_INITDB_DATABASE: my-smart-room
         ports:
-          - 27017:27017
+            - 27017:27017
         volumes:
-          - ./mongo/db:/data/db
-          - ./mongo/configdb:/data/configdb
-          - ./mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-  
+            - ./mongo/db:/data/db
+            - ./mongo/configdb:/data/configdb
+            - ./mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+
     mongo-express:
         image: mongo-express
         restart: always
         ports:
-          - 18081:8081
+            - 18081:8081
         environment:
-          ME_CONFIG_MONGODB_ADMINUSERNAME: root
-          ME_CONFIG_MONGODB_ADMINPASSWORD: root
-          ME_CONFIG_MONGODB_PORT: 27017
+            ME_CONFIG_MONGODB_ADMINUSERNAME: root
+            ME_CONFIG_MONGODB_ADMINPASSWORD: root
+            ME_CONFIG_MONGODB_PORT: 27017
         depends_on:
-          - mongo
+            - mongo
 
